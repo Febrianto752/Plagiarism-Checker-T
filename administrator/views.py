@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.views.generic import View 
+from django.views.generic import View, ListView
 from .models import Admin
 from django.contrib import messages
 from django.urls import reverse
@@ -54,4 +54,32 @@ class Profile(View):
   
   
   def get(self, *args, **kwargs):
+    if not 'username' in self.request.session:
+      return redirect('/')
+    
+    profile = Admin.objects.get(username=self.request.session['username'])
+    self.context['profile'] = profile
+    
     return render(self.request, self.template_name, self.context)
+  
+  
+class DaftarAdmin(ListView):
+  template_name = 'admin/daftar_admin.html'
+  context = {
+    'title': 'daftar admin'
+  }
+  model = Admin 
+  paginate_by = 25
+  
+  def get(self, *args, **kwargs):
+    if 'username' not in self.request.session:
+      return redirect('administrator:login')
+    
+    return super().get(*args, **kwargs)
+  
+  def get_context_data(self, *args, **kwargs):
+   
+    context = super().get_context_data()
+    context['title'] = 'daftar admin'
+    return context
+  
