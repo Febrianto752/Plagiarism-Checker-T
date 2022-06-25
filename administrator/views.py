@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from django.views.generic import View 
 from .models import Admin
 from django.contrib import messages
+from django.urls import reverse
 # Create your views here.
 
 class Login(View):
@@ -9,8 +10,15 @@ class Login(View):
   context = {
     'title': 'login admin'
   }
+  
   def get(self, *args, **kwargs):
+    if 'username' in self.request.session:
+      return redirect('administrator:dashboard')
+    else:
+      self.request.session.flush()
+      
     return render(self.request, self.template_name, self.context)
+  
   
   def post(self, *args, **kwargs):
     username = self.request.POST['username']
@@ -18,6 +26,7 @@ class Login(View):
     
     user = Admin.objects.filter(username=username, password=password)
     if user.exists():
+      self.request.session['username'] = username
       return redirect('administrator:dashboard')
     else:
       messages.error(self.request, 'your username or password is wrong!!')
@@ -31,4 +40,7 @@ class Dashboard(View):
   }
   
   def get(self, *args, **kwargs):
+    if not 'username' in self.request.session:
+      return redirect('/')
+    
     return render(self.request, self.template_name, self.context)

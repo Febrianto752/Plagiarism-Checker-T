@@ -8,3 +8,10 @@ class LandingPage(View):
   }
   def get(self, *args, **kwargs):
     return render(self.request, self.template_name, self.context)
+  
+class ErrorPage(View):
+  template_name = 'error-404-monochrome.svg'
+  
+  def get(self, *args, **kwargs):
+    
+    return render(self.request, self.template_name)
