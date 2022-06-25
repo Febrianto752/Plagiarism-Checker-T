@@ -82,4 +82,35 @@ class DaftarAdmin(ListView):
     context = super().get_context_data()
     context['title'] = 'daftar admin'
     return context
+
+
+class TambahAdmin(View):
+  template_name = 'admin/tambah.html'
   
+  def get(self,  *args, **kwargs):
+    if 'username' not in self.request.session:
+      return redirect('administrator:login')
+    
+    context = {
+      'title': 'Tambah Admin'
+    }
+    
+    return render(self.request, self.template_name, context)
+  
+  
+  def post(self, *args, **kwargs):
+    username = self.request.POST['username']
+    password = self.request.POST['password']
+    nama = self.request.POST['nama']
+    email = self.request.POST['email']
+    no_telp = self.request.POST['no_telp']
+    
+    
+    try:
+      Admin.objects.create(username=username, password=password, email=email, no_telp=no_telp)
+    except:
+      messages.error(self.request,'Something Error')
+      return redirect('administrator:tambah')
+    
+    messages.success(self.request, 'berhasil menambah admin baru')
+    return redirect('administrator:daftar_admin')

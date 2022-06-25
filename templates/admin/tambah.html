@@ -1,0 +1,73 @@
+{% extends 'admin_page_template.html' %}
+
+{% block content %}
+<nav aria-label="breadcrumb mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'administrator:daftar_admin' %}">Daftar Admin</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Tambah Admin</li>
+  </ol>
+</nav>
+
+{% if messages %}
+<ul class="messages p-0">
+  {% for message in messages %}
+
+  {% if message.tags == 'success' %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <p>{{ message }}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% elif message.tags == 'error' %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <p>{{ message }}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% else %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <p>{{ message }}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+
+  {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Form Tambah Admin</h2>
+
+<div class="row my-3">
+  <div class="col-sm-8 col-lg-6">
+    <form action="" method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="text" class="form-label">Username</label>
+        <input type="username" class="form-control" id="username" name="username"
+          placeholder="Masukan Username Admin..." required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="text" class="form-control" id="password" name="password"
+          placeholder="Masukan Password Akun Admin..." required>
+      </div>
+      <div class="mb-3">
+        <label for="nama" class="form-label">Nama</label>
+        <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan Nama Admin..." required>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Alamat Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Masukan Email Admin..." required>
+      </div>
+
+      <div class="mb-3">
+        <label for="no_telp" class="form-label">Nomor Telephone</label>
+        <input type="number" class="form-control" id="no_telp" name="no_telp" placeholder="Masukan No Telp Admin..."
+          required>
+      </div>
+
+
+      <button type="submit" class="btn btn-primary my-3">Buat Akun</button>
+    </form>
+  </div>
+</div>
+{% endblock content %}

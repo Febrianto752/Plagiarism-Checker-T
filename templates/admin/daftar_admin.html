@@ -5,7 +5,7 @@
 <h2>Daftar Admin</h2>
 <div class="row justify-content-end mt-4 mb-3">
   <div class="col">
-    <a href="#" class="btn btn-primary">Tambah Admin</a>
+    <a href="{% url 'administrator:tambah' %}" class="btn btn-primary">Tambah Admin</a>
   </div>
 </div>
 
@@ -43,7 +43,8 @@
           <th scope="col">Username</th>
           <th scope="col">Email</th>
           <th scope="col">Telephone</th>
-          <th scope="col">Status</th>
+          <th scope="col">Action</th>
+
         </tr>
       </thead>
       <tbody>
@@ -55,7 +56,13 @@
 
           <td>{{ admin.email }}</td>
           <td>{{ admin.no_telp }}</td>
-          <td>Admin</td>
+          <td>
+            <!-- <form action="{% url 'administrator:hapus' admin.id %}" method="get" class="d-inline-block">
+              {% csrf_token %}
+              <button type="submit" onclick="return confirm('yakin ingin menghapus data ini?')"
+                class="btn-sm btn-danger" style="border: 0; outline:0;"><i class="fas fa-times"></i> Delete</button>
+            </form> -->
+          </td>
 
         </tr>
         {% endfor %}
