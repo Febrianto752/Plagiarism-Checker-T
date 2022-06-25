@@ -4,28 +4,28 @@
       <div class="nav">
 
         {% if request.session.username %}
-        <a class="nav-link" href="{% url 'administrator:dashboard' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
           Dashboard
         </a>
-        <a class="nav-link" href="{% url 'administrator:profile' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="far fa-user"></i></div>
           Profile
         </a>
-        <a class="nav-link" href="{% url 'administrator:daftar_admin' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="fas fa-users-cog"></i></div>
           Daftar Admin
         </a>
-        <a class="nav-link" href="{% url 'administrator:daftar_mahasiswa' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
           Daftar Mahasiswa
         </a>
 
-        <a class="nav-link" href="{% url 'administrator:daftar_dospem' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="fas fa-chalkboard-teacher"></i></div>
           Daftar Dospem
         </a>
-        <a class="nav-link" href="{% url 'administrator:open_plag' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="fas fa-clock"></i></div>
           Open Check Plagiarism </i>
         </a>
@@ -33,15 +33,15 @@
 
 
         {% if request.session.npm %}
-        <a class="nav-link" href="{% url 'mahasiswa:dashboard' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
           Dashboard
         </a>
-        <a class="nav-link" href="{% url 'mahasiswa:profile' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="far fa-user"></i></div>
           Profile
         </a>
-        <a class="nav-link" href="{% url 'mahasiswa:check_plagiarism' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><span class="iconify" data-icon="icon-park-outline:radar-three"></span></div>
           Check Plagiarism
         </a>
@@ -49,15 +49,15 @@
 
 
         {% if request.session.nidn %}
-        <a class="nav-link" href="{% url 'dospem:dashboard' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
           Dashboard
         </a>
-        <a class="nav-link" href="{% url 'dospem:profile' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="far fa-user"></i></div>
           Profile
         </a>
-        <a class="nav-link" href="{% url 'dospem:mahasiswa_bimbingan' %}">
+        <a class="nav-link" href="#">
           <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
           Mahasiswa Bimbingan
         </a>
