@@ -44,3 +44,14 @@ class Dashboard(View):
       return redirect('/')
     
     return render(self.request, self.template_name, self.context)
+
+
+class Profile(View):
+  template_name = 'admin/profile.html'
+  context = {
+    'title': 'profile'
+  }
+  
+  
+  def get(self, *args, **kwargs):
+    return render(self.request, self.template_name, self.context)
