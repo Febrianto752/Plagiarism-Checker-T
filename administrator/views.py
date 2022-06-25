@@ -119,5 +119,11 @@ class TambahAdmin(View):
 class Hapus(View):
   def post(self, *args, **kwargs):
     Admin.objects.get(username=kwargs['username']).delete()
-    messages.success(self.request, 'berhasil menghapus admin dengan username = '+kwargs['username'])
+    messages.success(self.request, 'berhasil menghapus admin dengan username = '+ kwargs['username'])
     return redirect('administrator:daftar_admin')
+
+
+class DataTraining(View):
+  template_name = 'admin/data_training.html'
+  
+  

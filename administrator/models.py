@@ -14,3 +14,15 @@ class Admin(models.Model):
   
   class Meta:
     db_table = 'administrator'
+    
+class DataTraining(models.Model):
+  author = models.CharField(max_length=30)
+  tahun = models.IntegerField(null=True)
+  text_file = models.TextField()
+  
+  def save(self, *args, **kwargs):
+    
+    return f'{self.id}. {self.author}'
+  
+  class Meta: 
+    db_table = 'data_training'
