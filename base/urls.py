@@ -19,5 +19,6 @@ from .views import LandingPage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', LandingPage.as_view(), name='landing_page')
+    path('', LandingPage.as_view(), name='landing_page'),
+    path('administrator/', include(('administrator.urls', 'administrator'), namespace='administrator'))
 ]
