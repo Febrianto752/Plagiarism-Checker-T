@@ -114,3 +114,10 @@ class TambahAdmin(View):
     
     messages.success(self.request, 'berhasil menambah admin baru')
     return redirect('administrator:daftar_admin')
+
+
+class Hapus(View):
+  def post(self, *args, **kwargs):
+    Admin.objects.get(username=kwargs['username']).delete()
+    messages.success(self.request, 'berhasil menghapus admin dengan username = '+kwargs['username'])
+    return redirect('administrator:daftar_admin')
