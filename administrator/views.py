@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.views.generic import View, ListView
+from django.views.generic import View, ListView, RedirectView
 from .models import Admin, DataTraining
 from django.contrib import messages
 from django.urls import reverse
@@ -32,7 +32,13 @@ class Login(View):
       messages.error(self.request, 'your username or password is wrong!!')
       return redirect('administrator:login')
 
-
+class Logout(RedirectView):
+  url = '/administrator'
+  
+  def get_redirect_url(self, *args, **kwargs):
+    self.request.session.flush()
+    return super().get_redirect_url(*args, **kwargs)
+  
 class Dashboard(View):
   template_name = 'admin/dashboard.html'
   context = {

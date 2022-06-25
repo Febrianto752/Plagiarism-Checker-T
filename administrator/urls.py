@@ -1,8 +1,9 @@
 from django.urls import path 
-from .views import DaftarAdmin, Hapus, Login, Dashboard, Profile, TambahAdmin, DataTrainings, TambahDataTraining
+from .views import DaftarAdmin, Hapus, Login, Dashboard, Profile, TambahAdmin, DataTrainings, TambahDataTraining, Logout
 
 urlpatterns = [ 
   path('', Login.as_view(), name='login'),
+  path('logout/', Logout.as_view(), name='logout'),
   path('dashboard/', Dashboard.as_view(), name='dashboard'),
   path('profile/', Profile.as_view(), name='profile'),
   path('daftar_admin/', DaftarAdmin.as_view(), name='daftar_admin'),

@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'administrator'
+    'administrator',
+    'mahasiswa',
+    'plagiarisme'
 ]
 
 MIDDLEWARE = [
@@ -81,7 +83,10 @@ DATABASES = {
         'USER':'root',
         'PASSWORD': '',
         'HOST': 'localhost',
-        'PORT': 3306
+        'PORT': 3306,
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
 
