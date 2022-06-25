@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.views.generic import View, ListView
-from .models import Admin
+from .models import Admin, DataTraining
 from django.contrib import messages
 from django.urls import reverse
 # Create your views here.
@@ -80,7 +80,6 @@ class DaftarAdmin(ListView):
   def get_context_data(self, *args, **kwargs):
    
     context = super().get_context_data()
-    context['title'] = 'daftar admin'
     return context
 
 
@@ -123,7 +122,51 @@ class Hapus(View):
     return redirect('administrator:daftar_admin')
 
 
-class DataTraining(View):
-  template_name = 'admin/data_training.html'
+# ===== Data Trainings =====
+class DataTrainings(ListView):
+  template_name = 'admin/data_trainings.html'
+  context = {
+    'title': 'daftar data training'
+  }
+  model = DataTraining
+  paginate_by = 25
+  
+  def get(self, *args, **kwargs):
+    if 'username' not in self.request.session:
+      return redirect('administrator:login')
+    
+    return super().get(*args, **kwargs)
+  
+  def get_context_data(self, *args, **kwargs):
+   
+    context = super().get_context_data()
+    return context
+  
+
+class TambahDataTraining(View):
+  template_name = 'admin/tambah_data_training.html'
+  context = {
+     'title': 'Tambah Data Training'
+  }
+  
+  def get(self,  *args, **kwargs):
+    if 'username' not in self.request.session:
+      return redirect('administrator:login')
+
+    return render(self.request, self.template_name, self.context)
   
   
+  def post(self, *args, **kwargs):
+    author = self.request.POST['author']
+    tahun = self.request.POST['password']
+    file = self.request.FILES['file']
+
+    try:
+      # Admin.objects.create(username=username, password=password, email=email, no_telp=no_telp)
+      DataTraining.objects.create(author=author, tahun=tahun, path_file=file)
+    except:
+      messages.error(self.request,'Something Error')
+      return redirect('administrator:tambah')
+    
+    messages.success(self.request, 'berhasil menambah data training baru')
+    return redirect('administrator:data_trainings')

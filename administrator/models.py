@@ -1,5 +1,5 @@
 from django.db import models
-
+from pdfminer.high_level import extract_text
 # Create your models here.
 class Admin(models.Model):
   nama = models.CharField(max_length=40)
@@ -19,9 +19,15 @@ class DataTraining(models.Model):
   author = models.CharField(max_length=30)
   tahun = models.IntegerField(null=True)
   text_file = models.TextField()
+  path_file = models.FileField(upload_to='data_trainings/')
   
   def save(self, *args, **kwargs):
+    text = extract_text(self.path_file.pdf.pdf)
+    self.text_file = text
     
+    return super().save()
+  
+  def __str__(self) -> str:
     return f'{self.id}. {self.author}'
   
   class Meta: 

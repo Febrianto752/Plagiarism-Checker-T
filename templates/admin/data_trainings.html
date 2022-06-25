@@ -1,0 +1,55 @@
+{% extends 'admin_page_template.html' %}
+
+
+{% block content %}
+<h1>Daftar Data Training</h1>
+
+<a href="#" class="btn btn-primary my-4">Tambah Data Training</a>
+
+<div class="row">
+  <div class="col">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Author</th>
+          <th scope="col">Tahun</th>
+          <th scope="col">file</th>
+          <th scope="col">Action</th>
+
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for data_training in object_list %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>{{ data_training.author }}</td>
+
+          <td>{{ data_training.tahun }}</td>
+          <td>{{ data_training.path_file }}</td>
+          <td>
+            <form action="#" method="post" class="d-inline-block">
+              {% csrf_token %}
+              <button type="submit" onclick="return confirm('yakin ingin menghapus data ini?')"
+                class="btn-sm btn-danger" style="border: 0; outline:0;"><i class="fas fa-times"></i> Delete</button>
+            </form>
+          </td>
+
+        </tr>
+        {% endfor %}
+
+
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+
+
+
+{% endblock content %}
