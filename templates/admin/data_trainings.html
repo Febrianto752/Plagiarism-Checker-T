@@ -2,9 +2,18 @@
 
 
 {% block content %}
+<style>
+  .text-overflow {
+    display: block;
+    white-space: nowrap;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
 <h1>Daftar Data Training</h1>
 
-<a href="#" class="btn btn-primary my-4">Tambah Data Training</a>
+<a href="{% url 'administrator:tambah_data_training' %}" class="btn btn-primary my-4">Tambah Data Training</a>
 
 <div class="row">
   <div class="col">
@@ -27,7 +36,10 @@
           <td>{{ data_training.author }}</td>
 
           <td>{{ data_training.tahun }}</td>
-          <td>{{ data_training.path_file }}</td>
+          <td>
+            <a href="/media/{{ data_training.path_file }}" class="text-overflow">{{ data_training.path_file }}</a>
+
+          </td>
           <td>
             <form action="#" method="post" class="d-inline-block">
               {% csrf_token %}

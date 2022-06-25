@@ -1,5 +1,5 @@
 from django.urls import path 
-from .views import DaftarAdmin, Hapus, Login, Dashboard, Profile, TambahAdmin, DataTrainings
+from .views import DaftarAdmin, Hapus, Login, Dashboard, Profile, TambahAdmin, DataTrainings, TambahDataTraining
 
 urlpatterns = [ 
   path('', Login.as_view(), name='login'),
@@ -8,5 +8,6 @@ urlpatterns = [
   path('daftar_admin/', DaftarAdmin.as_view(), name='daftar_admin'),
   path('tambah/', TambahAdmin.as_view(), name='tambah'),
   path('hapus/<str:username>', Hapus.as_view(), name='hapus'),
-  path('data_trainings/', DataTrainings.as_view(), name='data_trainings')
+  path('data_trainings/', DataTrainings.as_view(), name='data_trainings'),
+  path('tambah_data_training/', TambahDataTraining.as_view(), name='tambah_data_training')
 ]

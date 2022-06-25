@@ -158,7 +158,7 @@ class TambahDataTraining(View):
   
   def post(self, *args, **kwargs):
     author = self.request.POST['author']
-    tahun = self.request.POST['password']
+    tahun = self.request.POST['tahun']
     file = self.request.FILES['file']
 
     try:
@@ -166,7 +166,7 @@ class TambahDataTraining(View):
       DataTraining.objects.create(author=author, tahun=tahun, path_file=file)
     except:
       messages.error(self.request,'Something Error')
-      return redirect('administrator:tambah')
+      return redirect('administrator:tambah_data_training')
     
     messages.success(self.request, 'berhasil menambah data training baru')
     return redirect('administrator:data_trainings')

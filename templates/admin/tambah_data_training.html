@@ -1,0 +1,66 @@
+{% extends 'admin_page_template.html' %}
+
+{% block content %}
+<nav aria-label="breadcrumb my-3">
+  <ol class="breadcrumb justify-content-center">
+    <li class="breadcrumb-item"><a href="{% url 'administrator:data_trainings' %}">Daftar Data Training</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Tambah Data Training</li>
+  </ol>
+</nav>
+
+{% if messages %}
+<ul class="messages p-0">
+  {% for message in messages %}
+
+  {% if message.tags == 'success' %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <p>{{ message }}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% elif message.tags == 'error' %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <p>{{ message }}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% else %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <p>{{ message }}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+
+  {% endfor %}
+</ul>
+{% endif %}
+
+<!-- <h2>Form Tambah Admin</h2> -->
+
+<div class="row justify-content-center my-3">
+  <div class="col-sm-8 col-lg-6">
+    <div class="card">
+      <h4 class="card-header text-center">Form Tambah Data Training</h4>
+      <div class="card-body">
+        <form action="" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="text" class="form-label">Author</label>
+            <input type="text" class="form-control" id="author" name="author" placeholder="Masukan Author.. " required>
+          </div>
+          <div class="mb-3">
+            <label for="tahun" class="form-label">Tahun</label>
+            <input type="text" class="form-control" id="tahun" name="tahun" placeholder="Masukan Tahun data training"
+              required>
+          </div>
+          <div class="mb-3">
+            <label for="file" class="form-label">File Pdf (Skripsi)</label>
+            <input type="file" class="form-control" id="file" name="file" placeholder="Masukan file" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary my-3">Tambah Data Training</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock content %}
