@@ -88,8 +88,20 @@
 
             <td class="d-flex">
               <div style="min-width: 230px;">
-                <a href="#" class="btn-sm btn-info text-decoration-none me-2"><i class="fas fa-eye"></i> View</a>
-                <a href="#" class="btn-sm btn-warning text-decoration-none me-2"><i class="fas fa-edit"></i> Edit</a>
+                <form action="{% url 'mahasiswa:profile' mahasiswa.npm %}" method="get" class="d-inline-block">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-sm btn-info text-decoration-none me-2"
+                    style="border: 0; outline:0;"><i class="fas fa-eye"></i> Profile</button>
+                </form>
+                <form action="#" method="get" class="d-inline-block">
+                  {% csrf_token %}
+                  <button type="submit" onclick="return confirm('yakin ingin menghapus data ini?')"
+                    class="btn-sm btn-warning text-decoration-none me-2" style="border: 0; outline:0;"><span
+                      class="iconify" style="margin-top: -2px;" data-icon="ic:baseline-plagiarism" data-width="16"
+                      data-height="16"></span>
+                    Check</button>
+                </form>
+
                 <form action="#" method="get" class="d-inline-block">
                   {% csrf_token %}
                   <button type="submit" onclick="return confirm('yakin ingin menghapus data ini?')"

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Mahasiswa 
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, DetailView
 from django.contrib import messages
 # Create your views here.
 
@@ -60,3 +60,30 @@ class Tambah(View):
     
     messages.success(self.request, f'Berhasil membuat mahasiswa baru dengan npm {npm}')
     return redirect('mahasiswa:daftar_mahasiswa')
+  
+class Profile(DetailView):
+  template_name = 'mahasiswa/profile.html'
+  model = Mahasiswa 
+  slug_field = 'npm'
+  slug_url_kwarg = 'npm'
+  
+  def get_context_data(self, *args, **kwargs):
+    context = super().get_context_data()
+    context['title'] = 'profile'
+    
+    
+    return context
+  
+class UbahProfile(View):
+  template_name = 'mahasiswa/ubah.html'
+  context = {
+    'title': 'ubah data mahasiswa'
+  }
+  
+  def get(self, *args, **kwargs):
+    mahasiswa = Mahasiswa.objects.get(npm=kwargs['npm'])
+    self.context['mahasiswa'] = mahasiswa
+    
+    return render(self.request, self.template_name, self.context)
+
+

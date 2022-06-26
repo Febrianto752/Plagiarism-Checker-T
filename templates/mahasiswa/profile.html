@@ -1,0 +1,61 @@
+{% extends 'admin_page_template.html' %}
+
+
+{% block content %}
+
+{% if request.session.username %}
+<nav aria-label="breadcrumb mb-3">
+  <ol class="breadcrumb ">
+    <li class="breadcrumb-item"><a href="{% url 'mahasiswa:daftar_mahasiswa' %}">Daftar Mahasiswa</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ object.nama }}</li>
+  </ol>
+</nav>
+
+{% endif %}
+
+
+
+<div class="row justify-content-center">
+  <div class="col-sm-8 col-lg-6">
+    <div class="card shadow-lg">
+      <h4 class="card-header text-center">Profile Mahasiswa</h4>
+      <div class="card-body">
+        <a href="{% url 'mahasiswa:ubah_profile' object.npm %}" class="btn-sm btn-warning text-decoration-none me-2"><i
+            class="fas fa-edit"></i> Edit</a>
+        <a href="#" class="btn-sm btn-info text-decoration-none me-2"><i class="fas fa-key"></i> Ganti
+          Password</a>
+        <div class="d-flex justify-content-center my-3">
+          <img src="/media/user.png" class="img-thumbnail" alt="profile" width="200px">
+        </div>
+
+        <div class="mb-3">
+          <h5 class="form-label text-center">NPM</h5>
+          <input type="text" class="form-control text-center w-75 mx-auto" value="{{ object.npm }}" disabled>
+        </div>
+
+        <div class="mb-3">
+          <h5 class="form-label text-center">Nama</h5>
+          <input type="text" class="form-control text-center w-75 mx-auto" value="{{ object.nama }}" disabled>
+        </div>
+
+        <div class="mb-3">
+          <h5 class="form-label text-center">Jurusan</h5>
+          <input type="text" class="form-control text-center w-75 mx-auto" value="{{ object.jurusan }}" disabled>
+        </div>
+
+        <div class="mb-3">
+          <h5 class="form-label text-center">Email</h5>
+          <input type="text" class="form-control text-center w-75 mx-auto" value="{{ object.email }}" disabled>
+        </div>
+        <div class="mb-3">
+          <h5 class="form-label text-center">Nomor Telephone</h5>
+          <input type="text" class="form-control text-center w-75 mx-auto" value="{{ object.no_telp }}" disabled>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
