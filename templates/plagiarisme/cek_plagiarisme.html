@@ -1,0 +1,73 @@
+{% extends 'admin_page_template.html' %}
+
+
+{% block content %}
+
+{% if request.session.username %}
+<div class="row">
+  <div class="col">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'mahasiswa:daftar_mahasiswa' %}">Daftar Mahasiswa</a></li>
+        <li class="breadcrumb-item active" aria-current="page">cek plagiarisme skripsi {{ object.nama }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+{% endif %}
+
+
+
+<div class="row my-3">
+  <div class="col">
+    <table>
+      <tr>
+        <td>Nama</td>
+        <td>:</td>
+        <td>{{ object.nama }}</td>
+      </tr>
+      <tr>
+        <td>NPM</td>
+        <td>:</td>
+        <td>{{ object.npm }}</td>
+      </tr>
+      <tr>
+        <td>Jurusan</td>
+        <td>:</td>
+        <td>{{ object.jurusan }}</td>
+      </tr>
+
+
+
+
+      <tr>
+        <td>File Skripsi</td>
+        <td>:</td>
+        <td>
+
+          {% if object.skripsi.pdf %}
+          <a href="/media/{{ object.skripsi.pdf }}">{{ object.skripsi.pdf }}</a>
+          {% else %}
+          <p class="p-0 m-0">Belum Ada</p>
+          {% endif %}
+
+
+        </td>
+      </tr>
+
+      <tr>
+        <td>Download Hasil Check Plagiarisme</td>
+        <td>:</td>
+        <td>
+
+          belum ada
+
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</div>
+
+
+{% endblock content %}

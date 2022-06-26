@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Mahasiswa 
-from django.views.generic import ListView, View, DetailView
+from django.views.generic import ListView, View, DetailView, RedirectView
 from django.contrib import messages
 # Create your views here.
 
@@ -86,4 +86,11 @@ class UbahProfile(View):
     
     return render(self.request, self.template_name, self.context)
 
-
+class Hapus(RedirectView):
+  url = '/mahasiswa/'
+  
+  def get_redirect_url(self, *args, **kwargs):
+    Mahasiswa.objects.get(npm=kwargs['npm']).delete()
+    messages.success(self.request, 'berhasil menghapus mahasiswa dengan npm = '+ kwargs['npm'])
+    
+    return super().get_redirect_url(*args, **kwargs)

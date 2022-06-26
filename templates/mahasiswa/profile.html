@@ -20,10 +20,15 @@
     <div class="card shadow-lg">
       <h4 class="card-header text-center">Profile Mahasiswa</h4>
       <div class="card-body">
+
+        {% if request.session.username %}
         <a href="{% url 'mahasiswa:ubah_profile' object.npm %}" class="btn-sm btn-warning text-decoration-none me-2"><i
             class="fas fa-edit"></i> Edit</a>
         <a href="#" class="btn-sm btn-info text-decoration-none me-2"><i class="fas fa-key"></i> Ganti
           Password</a>
+        {% endif %}
+
+
         <div class="d-flex justify-content-center my-3">
           <img src="/media/user.png" class="img-thumbnail" alt="profile" width="200px">
         </div>

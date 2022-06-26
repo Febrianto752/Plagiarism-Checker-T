@@ -24,7 +24,8 @@ urlpatterns = [
     path('', LandingPage.as_view(), name='landing_page'),
     path('error/', ErrorPage.as_view(), name='error_page'),
     path('administrator/', include(('administrator.urls', 'administrator'), namespace='administrator')),
-    path('mahasiswa/', include(('mahasiswa.urls', 'mahasiswa'), namespace='mahasiswa'))
+    path('mahasiswa/', include(('mahasiswa.urls', 'mahasiswa'), namespace='mahasiswa')),
+    path('plagiarisme/', include(('plagiarisme.urls', 'plagiarisme'), namespace='plagiarisme'))
 ]
 
 if settings.DEBUG:
