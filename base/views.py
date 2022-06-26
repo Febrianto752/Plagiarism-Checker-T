@@ -1,4 +1,4 @@
-from django.shortcuts import render 
+from django.shortcuts import redirect, render 
 from django.views.generic import View 
 
 class LandingPage(View):
@@ -7,6 +7,11 @@ class LandingPage(View):
     'title': 'landing page'
   }
   def get(self, *args, **kwargs):
+    if 'username' in self.request.session:
+      return redirect('administrator:dashboard')
+    elif 'npm' in self.request.session:
+      return redirect('mahasiswa:dashboard')
+    
     return render(self.request, self.template_name, self.context)
   
 class ErrorPage(View):
