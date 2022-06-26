@@ -13,6 +13,8 @@
 
         {% if request.session.username %}
         <li><a class="dropdown-item" href="{% url 'administrator:logout' %}">Logout</a></li>
+        {% elif request.session.npm %}
+        <li><a class="dropdown-item" href="{% url 'mahasiswa:logout' %}">Logout</a></li>
         {% endif %}
 
       </ul>

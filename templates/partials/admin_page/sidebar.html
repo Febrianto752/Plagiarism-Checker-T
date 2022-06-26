@@ -39,9 +39,9 @@
           <div class="sb-nav-link-icon"><i class="far fa-user"></i></div>
           Profile
         </a>
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'mahasiswa:cek_plagiarisme' request.session.npm %}">
           <div class="sb-nav-link-icon"><span class="iconify" data-icon="icon-park-outline:radar-three"></span></div>
-          Check Plagiarism
+          Check Plagiarisme
         </a>
         {% endif %}
 

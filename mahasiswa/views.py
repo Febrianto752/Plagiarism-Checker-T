@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Mahasiswa 
+from .models import Mahasiswa, Skripsi 
 from django.views.generic import ListView, View, DetailView, RedirectView
 from django.contrib import messages
 # Create your views here.
@@ -137,4 +137,40 @@ class Dashboard(View):
     
     return render(self.request, self.template_name, self.context)
 
-
+class CekPlagiarisme(DetailView):
+  template_name = 'mahasiswa/cek_plagiarisme.html'
+  model = Mahasiswa
+  slug_field = 'npm'
+  slug_url_kwarg = 'npm'
+  
+  def get(self, *args, **kwargs):
+    if not 'npm' in self.request.session:
+      return redirect('/mahasiswa/login/')
+    return super().get(*args, **kwargs)
+  
+  def get_context_data(self,*args, **kwargs):
+    context = super().get_context_data(**kwargs) 
+    context['title'] = 'cek plagiarisme'
+    return context
+  
+  
+class UploadSkripsi(View):
+  template_name = 'mahasiswa/upload_skripsi.html'
+  context = {
+    'title': 'upload skripsi'
+  }
+  
+  def get(self, *args, **kwargs):
+    
+    return render(self.request, self.template_name, self.context)
+  
+  def post(self, *args, **kwargs):
+    npm = self.request.POST['npm']
+    pdf = self.request.FILES['pdf']
+    
+    mahasiswa = Mahasiswa.objects.get(npm=npm)
+    print(mahasiswa.id)
+    Skripsi.objects.create(pdf=pdf, mahasiswa_id=mahasiswa.id)
+    
+    messages.success(self.request, 'berhasil mengupload skripsi!!')
+    return redirect('mahasiswa:upload_skripsi', npm)

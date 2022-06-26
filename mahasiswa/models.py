@@ -29,7 +29,7 @@ class Skripsi(models.Model):
   created_at = models.DateField(auto_now_add=True)
   updated_at = models.DateField(auto_now=True)
   
-  def save(self):
+  def save(self, *args,**kwargs):
     
     try:
       text = extract_text(self.pdf.file.file)
@@ -42,7 +42,7 @@ class Skripsi(models.Model):
     if ReportPlagiarism.objects.filter(skripsi_id = self.id).exists():
       ReportPlagiarism.objects.get(skripsi_id=self.id).delete()
     
-    return super().save()
+    return super().save(*args,**kwargs)
   
   def __str__(self) -> str:
      return f'{self.id}. {self.mahasiswa}'

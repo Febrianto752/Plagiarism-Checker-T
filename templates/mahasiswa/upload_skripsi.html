@@ -1,0 +1,89 @@
+{% extends 'admin_page_template.html' %}
+
+
+{% block content %}
+<!-- <nav aria-label="breadcrumb mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'mahasiswa:cek_plagiarisme' request.session.npm %}">Cek Plagiarisme</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Upload Skripsi</li>
+  </ol>
+</nav> -->
+
+<a href="{% url 'mahasiswa:cek_plagiarisme' request.session.npm %}" class="btn-sm btn-info text-decoration-none">&laquo;
+  Back</a>
+<br>
+
+{% if messages %}
+<ul class="messages p-0 mt-2">
+  {% for message in messages %}
+
+  {% if message.tags == 'success' %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <p class="text-center">{{ message }}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% elif message.tags == 'error' %}
+  <div class="alert alert-error alert-dismissible fade show" role="alert">
+    <p class="text-center">{{ message }}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% else %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <p class="text-center">{{ message }}</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+
+  {% endfor %}
+</ul>
+{% endif %}
+<!-- <div class="alert alert-success alert-dismissible fade show pb-0" role="alert">
+  <p>Berhasil Mengupload Skripsi Mahasiswa</p>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div> -->
+
+<form action="" method="post" enctype="multipart/form-data" class="mt-3">
+  {% csrf_token %}
+  <input type="hidden" name="npm" value="{{ request.session.npm }}">
+  <div class="p-2 border shadow-sm">
+    <table>
+      <tr>
+        <td class="pe-2">
+          File Skripsi
+        </td>
+        <td> : </td>
+        <td>
+          <div class="ms-2">
+            <div class="">
+              <input class="form-control" type="file" id="formFile" name="pdf" required>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <p>file yang diupload harus berupa pdf dan Maksimal ukuran file : 25mb </p>
+  <div class="spinner-border text-primary d-none" role="status" id="spinner">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <br>
+  <button type="submit" class="btn btn-primary mt-3" id="btnUpload">Upload</button>
+</form>
+
+<script>
+  const btnUploadElem = document.getElementById('btnUpload')
+  const spinnerElem = document.getElementById('spinner')
+  const pdfElem = document.querySelector('input[type=file]')
+  console.log(pdfElem.value == false);
+
+  btnUploadElem.addEventListener('click', function (event) {
+    if (pdfElem.value != false) {
+      spinnerElem.classList.remove('d-none')
+
+    }
+  })
+</script>
+
+
+{% endblock content %}
