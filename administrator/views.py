@@ -164,17 +164,22 @@ class TambahDataTraining(View):
     tahun = self.request.POST['tahun']
     file = self.request.FILES['file']
 
-    try:
+    # try:
       # Admin.objects.create(username=username, password=password, email=email, no_telp=no_telp)
-      DataTraining.objects.create(author=author, tahun=tahun, path_file=file)
-    except:
-      messages.error(self.request,'Something Error')
-      return redirect('administrator:tambah_data_training')
+    DataTraining.objects.create(author=author, tahun=tahun, path_file=file)
+    # except:
+    #   messages.error(self.request,'Something Error')
+    #   return redirect('administrator:tambah_data_training')
     
     messages.success(self.request, 'berhasil menambah data training baru')
     return redirect('administrator:data_trainings')
 
-
+class HapusDataTraining(View):
+  def post(self, *args, **kwargs):
+    DataTraining.objects.get(id=kwargs['id']).delete()
+    messages.success(self.request, 'berhasil menghapus data training')
+    
+    return redirect('administrator:data_trainings')
 
 
   
