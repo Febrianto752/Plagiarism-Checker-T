@@ -94,3 +94,47 @@ class Hapus(RedirectView):
     messages.success(self.request, 'berhasil menghapus mahasiswa dengan npm = '+ kwargs['npm'])
     
     return super().get_redirect_url(*args, **kwargs)
+
+
+# == for access mahasiswa == 
+class Login(View):
+  template_name = 'auth/mahasiswa/login.html'
+  context = {
+    'title': 'login'
+  }
+  def get(self, *args, **kwargs):
+    return render(self.request, self.template_name, self.context)
+     
+  def post(self, *args, **kwargs):
+    npm = self.request.POST['npm']
+    password = self.request.POST['password']
+    
+    user = Mahasiswa.objects.filter(npm=npm, password=password)
+    if user.exists():
+      self.request.session['npm'] = npm
+      return redirect('mahasiswa:dashboard')
+    else:
+      messages.error(self.request, 'your npm or password is wrong!!')
+      return redirect('mahasiswa:login')
+
+
+class Logout(RedirectView):
+  url = '/mahasiswa/login'
+  
+  def get_redirect_url(self, *args, **kwargs):
+    self.request.session.flush()
+    return super().get_redirect_url(*args, **kwargs)
+  
+class Dashboard(View):
+  template_name = 'mahasiswa/dashboard.html'
+  context = {
+    'title': 'dashboard'
+  }
+  
+  def get(self, *args, **kwargs):
+    if not 'npm' in self.request.session:
+      return redirect('/mahasiswa/login')
+    
+    return render(self.request, self.template_name, self.context)
+
+

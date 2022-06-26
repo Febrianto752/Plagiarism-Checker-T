@@ -31,11 +31,11 @@
 
 
         {% if request.session.npm %}
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'mahasiswa:dashboard' %}">
           <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
           Dashboard
         </a>
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'mahasiswa:profile' request.session.npm %}">
           <div class="sb-nav-link-icon"><i class="far fa-user"></i></div>
           Profile
         </a>

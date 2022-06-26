@@ -24,10 +24,10 @@
         {% if request.session.username %}
         <a href="{% url 'mahasiswa:ubah_profile' object.npm %}" class="btn-sm btn-warning text-decoration-none me-2"><i
             class="fas fa-edit"></i> Edit</a>
+
+        {% endif %}
         <a href="#" class="btn-sm btn-info text-decoration-none me-2"><i class="fas fa-key"></i> Ganti
           Password</a>
-        {% endif %}
-
 
         <div class="d-flex justify-content-center my-3">
           <img src="/media/user.png" class="img-thumbnail" alt="profile" width="200px">
