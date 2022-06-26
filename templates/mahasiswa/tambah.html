@@ -1,0 +1,77 @@
+{% extends 'admin_page_template.html' %}
+
+
+{% block content %}
+<nav aria-label="breadcrumb mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'mahasiswa:daftar_mahasiswa' %}">Daftar Mahasiswa</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Tambah Mahasiswa</li>
+  </ol>
+</nav>
+<h2 class="mb-5">Form Buat Akun Mahasiswa</h2>
+
+<div class="row my-3">
+  <div class="col-sm-8 col-lg-6">
+    <form action="" method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="text" class="form-label">NPM</label>
+        <input type="number" class="form-control" id="npm" name="npm" placeholder="Masukan NPM Mahasiswa..." required>
+      </div>
+
+      <div class="mb-3">
+        <label for="text" class="form-label">Nama Lengkap Mahasiswa</label>
+        <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan Nama Mahasiswa..." required>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password Akun Mahasiswa</label>
+        <input type="text" class="form-control" id="password" name="password"
+          placeholder="Masukan Password Akun Mahasiswa..." required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Masukan Email Mahasiswa..."
+          required>
+      </div>
+
+      <!-- <div class="mb-3">
+        <label for="confirm_password" class="form-label">confirm_password password</label>
+        <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+          placeholder="Masukan Confirm Password...">
+      </div> -->
+      <div class="mb-3">
+        <label for="jurusan" class="form-label">Jurusan Mahasiswa</label>
+        <select class="form-select" aria-label="Default select example" id="jurusan" name="jurusan" required>
+          <option disabled>pilih jurusan</option>
+
+          {% for jurusan in jurusan_jurusan %}
+
+          {% if jurusan == 'Informatika' %}
+          <option value="{{ jurusan }}" selected>{{ jurusan }}</option>
+          {% endif %}
+          <option value="{{ jurusan }}">{{ jurusan }}</option>
+
+          {% endfor %}
+
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="semester" class="form-label">Semester</label>
+        <input type="number" class="form-control" id="semester" name="semester"
+          placeholder="Masukan Semester Mahasiswa..." max="12"
+          onKeyUp="if(this.value>12){this.value='12';}else if(this.value<0){this.value='6';}" value="8" required>
+      </div>
+      <div class="mb-3">
+        <label for="no_telp" class="form-label">Nomor Telephone Mahasiswa</label>
+        <input type="number" class="form-control" id="no_telp" name="no_telp" placeholder="Masukan No Telp Mahasiswa..."
+          required>
+      </div>
+
+
+      <button type="submit" class="btn btn-primary my-3">Buat Akun</button>
+    </form>
+  </div>
+</div>
+
+
+{% endblock content %}

@@ -71,21 +71,18 @@ class Profile(View):
   
 class DaftarAdmin(ListView):
   template_name = 'admin/daftar_admin.html'
-  context = {
-    'title': 'daftar admin'
-  }
   model = Admin 
   paginate_by = 25
   
   def get(self, *args, **kwargs):
     if 'username' not in self.request.session:
-      return redirect('administrator:login')
+      return redirect('/')
     
     return super().get(*args, **kwargs)
   
   def get_context_data(self, *args, **kwargs):
-   
     context = super().get_context_data()
+    context['title'] = 'daftar damin'
     return context
 
 
