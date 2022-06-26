@@ -176,3 +176,20 @@ class TambahDataTraining(View):
     
     messages.success(self.request, 'berhasil menambah data training baru')
     return redirect('administrator:data_trainings')
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+

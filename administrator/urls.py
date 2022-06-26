@@ -10,5 +10,6 @@ urlpatterns = [
   path('tambah/', TambahAdmin.as_view(), name='tambah'),
   path('hapus/<str:username>', Hapus.as_view(), name='hapus'),
   path('data_trainings/', DataTrainings.as_view(), name='data_trainings'),
-  path('tambah_data_training/', TambahDataTraining.as_view(), name='tambah_data_training')
+  path('tambah_data_training/', TambahDataTraining.as_view(), name='tambah_data_training'),
+
 ]

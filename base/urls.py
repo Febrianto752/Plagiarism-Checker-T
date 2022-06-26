@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', LandingPage.as_view(), name='landing_page'),
     path('error/', ErrorPage.as_view(), name='error_page'),
-    path('administrator/', include(('administrator.urls', 'administrator'), namespace='administrator'))
+    path('administrator/', include(('administrator.urls', 'administrator'), namespace='administrator')),
+    path('mahasiswa/', include(('mahasiswa.urls', 'mahasiswa'), namespace='mahasiswa'))
 ]
 
 if settings.DEBUG:
