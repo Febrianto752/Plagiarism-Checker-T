@@ -40,6 +40,8 @@
   }
 </style>
 
+
+{% if request.session.npm %}
 <div class="row mb-5">
   <div class="col">
     <nav aria-label="breadcrumb">
@@ -51,6 +53,9 @@
     </nav>
   </div>
 </div>
+{% endif %}
+
+
 
 
 
@@ -80,7 +85,7 @@
 </div>
 
 
-<h1 class="text-center" id="reportPlagiarism">Report Plagiarism</h1>
+<h1 class="text-center mb-5" id="reportPlagiarism">Report Plagiarism</h1>
 
 <p class="text-center mt-3">Similiarity Found : <span id="scoreSimiliarity"></span></p>
 <p id="tanggal" class="text-center"></p>

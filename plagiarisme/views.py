@@ -174,16 +174,10 @@ def setPlagiarismPercentage(request, *args, **kwargs):
 
 # Halaman detail plagiarism 
 class SimiliarityBetweenTwoThesis(View):
-  # template_name = 'admin/mahasiswa/detail_report.html'
+  template_name = 'mahasiswa/detail_report.html'
   
   def get(self, *args, **kwargs):
-    if 'username' in self.request.session:
-      self.template_name = 'admin/mahasiswa/detail_report.html'
-    elif 'npm' in self.request.session:
-      self.template_name = 'mahasiswa/detail_report.html'
-    elif 'nidn' in self.request.session:
-      self.template_name = 'plagiarisme/detail_report.html'
-      
+ 
     npm_mhs = kwargs['npm_mhs']
     id_data_training = kwargs['id_data_training']
     
@@ -247,4 +241,24 @@ def similiarityOneToOne(request, *args, **kwargs):
   stack_quadword_group = make_stack_quadword_group(quadword_groups)
   del stack_quadword_group[0][0]
   return JsonResponse({'stack_quadword_group': stack_quadword_group[0]})
+
+
+
+
+
+
+
+
+class SideBySide(View):
+  template_name = 'plagiarisme/side_by_side.html'
+  context = {
+    'title': 'test compare side by side'
+  }
+
+
+
+
+
+
+
 

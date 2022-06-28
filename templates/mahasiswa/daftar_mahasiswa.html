@@ -56,7 +56,7 @@
             <th scope="col">#</th>
             <th scope="col">Npm</th>
             <th scope="col">Nama</th>
-            <th scope="col">Status</th>
+            <th scope="col">Status Terakhir</th>
             <th scope="col">Hasil CekPlag</th>
             <th scope="col">Action</th>
           </tr>
@@ -87,11 +87,23 @@
 
             </td>
             <td>
+
+              {% if mahasiswa.skripsi.reportplagiarism.is_done %}
+              <form action="{% url 'mahasiswa:report_plagiarism' mahasiswa.npm %}" method="get"
+                class="d-inline-block mb-3 outline-0 border-0">
+                {% csrf_token %}
+                <button class="btn-sm btn-success text-decoration-none" id="linkDownloadReport"
+                  style="min-width: fit-content; white-space: nowrap;">show report</button>
+              </form>
+              {% else %}
               Belum Ada
+              {% endif %}
+
+
 
             </td>
 
-            <td class="d-flex">
+            <td>
               <div style="min-width: 230px;">
                 <form action="{% url 'mahasiswa:profile' mahasiswa.npm %}" method="get" class="d-inline-block">
                   {% csrf_token %}

@@ -207,8 +207,6 @@ class ShowReport(View):
   
   
   def get(self, *args, **kwargs):
-    if 'npm' not in self.request.session:
-      return redirect('mahasiswa:login')
     
     mahasiswa = Mahasiswa.objects.get(npm=kwargs['npm'])
     skripsi_mhs = Skripsi.objects.get(mahasiswa_id = mahasiswa.id)

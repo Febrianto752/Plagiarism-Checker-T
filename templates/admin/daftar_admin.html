@@ -58,13 +58,23 @@
             <td>{{ admin.email }}</td>
             <td>{{ admin.no_telp }}</td>
             <td>
+              {% if admin.username == request.session.username %}
+              You
+
+              {% else %}
               <form action="{% url 'administrator:hapus' admin.username %}" method="post" class="d-inline-block">
                 {% csrf_token %}
                 <button type="submit" onclick="return confirm('yakin ingin menghapus data ini?')"
                   class="btn-sm btn-danger" style="border: 0; outline:0; "><i class="fas fa-times"></i>
                   Hapus</button>
               </form>
+              {% endif %}
             </td>
+
+
+
+
+
 
           </tr>
           {% endfor %}
