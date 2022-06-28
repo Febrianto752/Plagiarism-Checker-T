@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render 
 from django.views.generic import View 
-
+from django.urls import resolve
 class LandingPage(View):
   template_name = 'landing_page.html'
   context = {
@@ -11,6 +11,10 @@ class LandingPage(View):
       return redirect('administrator:dashboard')
     elif 'npm' in self.request.session:
       return redirect('mahasiswa:dashboard')
+    
+    
+    current_url = resolve(self.request.path_info).url_name
+    print(current_url)
     
     return render(self.request, self.template_name, self.context)
   

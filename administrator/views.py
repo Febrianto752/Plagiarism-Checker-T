@@ -4,7 +4,8 @@ from django.views.generic import View, ListView, RedirectView
 from administrator.forms import DataTrainingForm
 from .models import Admin, DataTraining
 from django.contrib import messages
-from django.urls import reverse
+from django.urls import reverse, resolve
+
 # Create your views here.
 
 class Login(View):
@@ -51,6 +52,11 @@ class Dashboard(View):
     if not 'username' in self.request.session:
       return redirect('/')
     
+    
+    current_url = resolve(self.request.path_info).url_name
+    self.context['current_url'] = current_url
+    
+    
     return render(self.request, self.template_name, self.context)
 
 
@@ -64,6 +70,9 @@ class Profile(View):
   def get(self, *args, **kwargs):
     if not 'username' in self.request.session:
       return redirect('/')
+    
+    current_url = resolve(self.request.path_info).url_name
+    self.context['current_url'] = current_url
     
     profile = Admin.objects.get(username=self.request.session['username'])
     self.context['profile'] = profile
@@ -80,11 +89,16 @@ class DaftarAdmin(ListView):
     if 'username' not in self.request.session:
       return redirect('/')
     
+    
+    
     return super().get(*args, **kwargs)
   
   def get_context_data(self, *args, **kwargs):
+    current_url = resolve(self.request.path_info).url_name
+    
     context = super().get_context_data()
     context['title'] = 'daftar damin'
+    context['current_url'] = current_url
     return context
 
 
@@ -183,21 +197,22 @@ class UbahPassword(View):
 # ===== Data Trainings =====
 class DataTrainings(ListView):
   template_name = 'admin/data_trainings.html'
-  context = {
-    'title': 'daftar data training'
-  }
+
   model = DataTraining
   paginate_by = 25
   
   def get(self, *args, **kwargs):
     if 'username' not in self.request.session:
       return redirect('administrator:login')
+
     
     return super().get(*args, **kwargs)
   
   def get_context_data(self, *args, **kwargs):
-   
+    current_url = resolve(self.request.path_info).url_name
     context = super().get_context_data()
+    context['title'] = 'daftar data training'
+    context['current_url'] = current_url
     return context
   
 

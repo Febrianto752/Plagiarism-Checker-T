@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import resolve
 from administrator.models import DataTraining
 
 from mahasiswa.forms import SkripsiForm
@@ -25,8 +26,10 @@ class DaftarMahasiswa(ListView):
     return super().get(*args, **kwargs)
   
   def get_context_data(self, *args, **kwargs):
+    current_url = resolve(self.request.path_info).url_name
     context = super().get_context_data()
     context['title'] = 'daftar mahasiswa'
+    context['current_url'] = current_url
     return context
   
   
@@ -71,8 +74,10 @@ class Profile(DetailView):
   slug_url_kwarg = 'npm'
   
   def get_context_data(self, *args, **kwargs):
+    current_url = resolve(self.request.path_info).url_name
     context = super().get_context_data()
     context['title'] = 'profile'
+    context['current_url'] = current_url
     
     
     return context
@@ -139,6 +144,9 @@ class Dashboard(View):
     if not 'npm' in self.request.session:
       return redirect('/mahasiswa/login')
     
+    current_url = resolve(self.request.path_info).url_name
+    self.context['current_url'] = current_url
+    
     return render(self.request, self.template_name, self.context)
 
 class CekPlagiarisme(DetailView):
@@ -154,9 +162,12 @@ class CekPlagiarisme(DetailView):
   
   def get_context_data(self,*args, **kwargs):
     jumlah_data_training = DataTraining.objects.all().count()
+    current_url = resolve(self.request.path_info).url_name
     context = super().get_context_data(**kwargs) 
     context['title'] = 'cek plagiarisme'
     context['jumlah_data_training'] = jumlah_data_training
+    context['current_url'] = current_url
+    
     return context
   
   

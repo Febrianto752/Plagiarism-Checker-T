@@ -4,28 +4,34 @@
       <div class="nav">
 
         {% if request.session.username %}
-        <a class="nav-link" href="{% url 'administrator:dashboard' %}">
+        <a class="nav-link {% if current_url == 'dashboard' %} text-white {% endif %} "
+          href="{% url 'administrator:dashboard' %}">
           <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
           Dashboard
         </a>
-        <a class="nav-link" href="{% url 'administrator:profile' %}">
+        <a class="nav-link {% if current_url == 'profile' %} text-white {% endif %}"
+          href="{% url 'administrator:profile' %}">
           <div class="sb-nav-link-icon"><i class="far fa-user"></i></div>
           Profile
         </a>
-        <a class="nav-link" href="{% url 'administrator:daftar_admin' %}">
+        <a class="nav-link {% if current_url == 'daftar_admin' %} text-white {% endif %}"
+          href="{% url 'administrator:daftar_admin' %}">
           <div class="sb-nav-link-icon"><i class="fas fa-users-cog"></i></div>
           Daftar Admin
         </a>
-        <a class="nav-link" href="{% url 'administrator:data_trainings' %}">
+        <a class="nav-link {% if current_url == 'data_trainings' %} text-white {% endif %}"
+          href="{% url 'administrator:data_trainings' %}">
           <div class="sb-nav-link-icon"><span class="iconify" data-icon="mdi:file-document-plus-outline" data-width="20"
               data-height="20"></span></div>
           Data Training
         </a>
-        <a class="nav-link" href="{% url 'mahasiswa:daftar_mahasiswa' %}">
+        <a class="nav-link {% if current_url == 'daftar_mahasiswa' %} text-white {% endif %}"
+          href="{% url 'mahasiswa:daftar_mahasiswa' %}">
           <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
           Daftar Mahasiswa
         </a>
-        <a class="nav-link" href="{% url 'plagiarisme:side_by_side_test' %}">
+        <a class="nav-link {% if current_url == 'side_by_side_test' %} text-white {% endif %}"
+          href="{% url 'plagiarisme:side_by_side_test' %}">
           <div class="sb-nav-link-icon"><span class="iconify" data-icon="carbon:compare" data-width="20"
               data-height="20"></span></div>
           Compare 2 file
@@ -36,15 +42,18 @@
 
 
         {% if request.session.npm %}
-        <a class="nav-link" href="{% url 'mahasiswa:dashboard' %}">
+        <a class="nav-link {% if current_url == 'dashboard' %} text-white {% endif %}"
+          href="{% url 'mahasiswa:dashboard' %}">
           <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
           Dashboard
         </a>
-        <a class="nav-link" href="{% url 'mahasiswa:profile' request.session.npm %}">
+        <a class="nav-link {% if current_url == 'profile' %} text-white {% endif %}"
+          href="{% url 'mahasiswa:profile' request.session.npm %}">
           <div class="sb-nav-link-icon"><i class="far fa-user"></i></div>
           Profile
         </a>
-        <a class="nav-link" href="{% url 'mahasiswa:cek_plagiarisme' request.session.npm %}">
+        <a class="nav-link {% if current_url == 'cek_plagiarisme' %} text-white {% endif %}"
+          href="{% url 'mahasiswa:cek_plagiarisme' request.session.npm %}">
           <div class="sb-nav-link-icon"><span class="iconify" data-icon="mdi:file-search-outline" data-width="20"
               data-height="20"></span></div>
           Cek Plagiarisme

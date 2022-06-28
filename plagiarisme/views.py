@@ -1,4 +1,5 @@
 import json
+from django.urls import resolve
 from pdfminer.high_level import extract_text
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -242,6 +243,8 @@ class SideBySideView(View):
 
   def get(self, *args, **kwargs):
     # self.context['coba'] = [[123],2,3]
+    current_url = resolve(self.request.path_info).url_name
+    self.context['current_url'] = current_url
     return render(self.request, self.template_name, self.context)
   
   def post(self, *args, **kwargs):
