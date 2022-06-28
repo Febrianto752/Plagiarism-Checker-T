@@ -151,6 +151,30 @@ class UbahProfile(View):
     return redirect('administrator:profile')
   
 
+class UbahPassword(View):
+  template_name = 'admin/ubah_password.html'
+  context = {
+    'title': 'ubah password'
+  }
+  
+  def get(self, *args, **kwargs):
+    if 'username' not in self.request.session:
+      return redirect('/error')
+    
+    return render(self.request, self.template_name, self.context)
+
+  def post(self, *args, **kwargs):
+    password = self.request.POST['password']
+    confirm_password = self.request.POST['confirm_password']
+    
+    if password != confirm_password:
+      messages.error(self.request, 'password and confirm password dont match!')
+      return redirect('administrator:ubah_password')
+    
+    Admin.objects.filter(username=self.request.session['username']).update(password=password)
+    messages.success(self.request, 'berhasil mengubah password akun')
+    return redirect('administrator:profile')
+
 
 
 
