@@ -42,9 +42,14 @@
       <div class="card-body">
         <form action="" method="post" enctype="multipart/form-data">
           {% csrf_token %}
+          <!-- <div class="mb-3">
+            <label for="text" class="form-label">Judul</label>
+            <input type="text" class="form-control" id="judul" name="judul" placeholder="Masukan judul.. " required>
+          </div>
           <div class="mb-3">
-            <label for="text" class="form-label">Author</label>
-            <input type="text" class="form-control" id="author" name="author" placeholder="Masukan Author.. " required>
+            <label for="text" class="form-label">Penulis</label>
+            <input type="text" class="form-control" id="penulis" name="penulis" placeholder="Masukan penulis.. "
+              required>
           </div>
           <div class="mb-3">
             <label for="tahun" class="form-label">Tahun</label>
@@ -54,7 +59,9 @@
           <div class="mb-3">
             <label for="file" class="form-label">File Pdf (Skripsi)</label>
             <input type="file" class="form-control" id="file" name="file" placeholder="Masukan file" required>
-          </div>
+          </div> -->
+
+          {{ data_training_form }}
 
           <button type="submit" class="btn btn-primary my-3">Tambah Data Training</button>
         </form>

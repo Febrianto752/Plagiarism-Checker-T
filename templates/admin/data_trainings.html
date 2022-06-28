@@ -46,7 +46,8 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Author</th>
+          <th scope="col">Judul</th>
+          <th scope="col">Penulis</th>
           <th scope="col">Tahun</th>
           <th scope="col">file</th>
           <th scope="col">Action</th>
@@ -58,11 +59,12 @@
         {% for data_training in object_list %}
         <tr>
           <th scope="row">{{ forloop.counter }}</th>
-          <td>{{ data_training.author }}</td>
+          <td>{{ data_training.judul }}</td>
+          <td>{{ data_training.penulis }}</td>
 
           <td>{{ data_training.tahun }}</td>
           <td>
-            <a href="/media/{{ data_training.path_file }}" class="text-overflow">{{ data_training.path_file }}</a>
+            <a href="/media/{{ data_training.file }}" class="text-overflow">{{ data_training.file }}</a>
 
           </td>
           <td>

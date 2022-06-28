@@ -1,5 +1,7 @@
 from django.shortcuts import redirect, render
 from django.views.generic import View, ListView, RedirectView
+
+from administrator.forms import DataTrainingForm
 from .models import Admin, DataTraining
 from django.contrib import messages
 from django.urls import reverse
@@ -155,24 +157,26 @@ class TambahDataTraining(View):
   def get(self,  *args, **kwargs):
     if 'username' not in self.request.session:
       return redirect('administrator:login')
+    
+    data_training_form = DataTrainingForm()
+    self.context['data_training_form'] = data_training_form
 
     return render(self.request, self.template_name, self.context)
   
   
   def post(self, *args, **kwargs):
-    author = self.request.POST['author']
-    tahun = self.request.POST['tahun']
-    file = self.request.FILES['file']
-
-    # try:
-      # Admin.objects.create(username=username, password=password, email=email, no_telp=no_telp)
-    DataTraining.objects.create(author=author, tahun=tahun, path_file=file)
-    # except:
-    #   messages.error(self.request,'Something Error')
-    #   return redirect('administrator:tambah_data_training')
+    form = DataTrainingForm(self.request.POST, self.request.FILES)
     
-    messages.success(self.request, 'berhasil menambah data training baru')
-    return redirect('administrator:data_trainings')
+    if form.is_valid():
+      try:
+        form.save()
+        
+      except:
+        messages.error(self.request, 'file yang anda upload harus pdf...') # mengirimkan flash message error
+        return redirect('administrator:tambah_data_training')
+      
+      messages.success(self.request, 'Berhasil Mengupload...')
+      return redirect('administrator:data_trainings')
 
 class HapusDataTraining(View):
   def post(self, *args, **kwargs):

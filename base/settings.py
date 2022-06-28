@@ -79,14 +79,11 @@ WSGI_APPLICATION = 'base.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'plagiarism_checker_t',
+        'NAME': 'plagiarism_checker',
         'USER':'root',
         'PASSWORD': '',
         'HOST': 'localhost',
-        'PORT': 3306,
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-        }
+        'PORT': 3306
     }
 }
 

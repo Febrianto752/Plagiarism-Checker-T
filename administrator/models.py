@@ -21,59 +21,61 @@ class Admin(models.Model):
     db_table = 'administrator'
     
 class DataTraining(models.Model):
-  author = models.CharField(max_length=30)
+  judul = models.CharField(max_length=30, null=True)
+  penulis = models.CharField(max_length=30, null=True)
   tahun = models.IntegerField(null=True)
   text_file = models.TextField()
-  path_file = models.FileField(upload_to='data_trainings/')
+  file = models.FileField(upload_to='data_trainings/')
   created_at = models.DateField(auto_now_add=True)
   updated_at = models.DateField(auto_now=True)
   
-  def save(self, *args, **kwargs):
-    # print(dir(self.path_file.file.file))
-    # raise SystemExit
+  class Meta: 
+    db_table = 'data_training'
+    
+  def __str__(self) -> str:
+    return f'{self.id}. {self.judul}'
+  
+  def save(self):
+    
     try:
-      text = str(extract_text(self.path_file.file.file))
-      filter_text = str(filterText(text))
+      text = extract_text(self.file.file.file)
+      filter_text = filterText(text)
       # print(filter_text)
-      self.text_file = str(filter_text)
+      self.text_file = filter_text
     except:
       self.text_file = ''
     
     return super().save()
   
   def delete(self, *args, **kwargs):
-    # print(dir(self.path_file))
-    # print(self.path_file.path)
-    os.remove(self.path_file.path)
+    self.file.delete()
     
-    return super().delete(*args,**kwargs)
-  
-  
-  def __str__(self) -> str:
-    return f'{self.id}. {self.author}'
-  
-  
-  
-  class Meta: 
-    db_table = 'data_training'
-    
-# # jika user update data table skripsi maka file old pdf akan dihapus
+    return super().delete(*args, **kwargs)
+
+  # def get_absolute_url(self):
+  #   url_slug = {
+  #     'pk':self.id
+  #   }
+  #   return reverse('administrator:detail_mahasiswa')
+
+# jika user update data table skripsi maka file old pdf akan dihapus
 # @receiver(models.signals.pre_save, sender=DataTraining)
-# def auto_delete_file_skripsi_on_change(sender, instance, **kwargs):
+# def auto_delete_file_datatraining_on_change(sender, instance, **kwargs):
 #     """
 #     Deletes old file from filesystem
-#     when corresponding `DataTraining` object is updated
+#     when corresponding `Skripsi` object is updated
 #     with new file.
 #     """
 #     if not instance.pk:
 #         return False
 
 #     try:
-#         old_file = DataTraining.objects.get(pk=instance.pk).pdf
+#         old_file = DataTraining.objects.get(pk=instance.pk).file
 #     except DataTraining.DoesNotExist:
 #         return False
 
-#     new_file = instance.pdf
+#     new_file = instance.file
 #     if not old_file == new_file:
 #         if os.path.isfile(old_file.path):
 #             os.remove(old_file.path)
+  
