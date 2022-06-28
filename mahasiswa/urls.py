@@ -1,5 +1,5 @@
 from django.urls import path 
-from .views import DaftarMahasiswa, ShowReport, Tambah, Profile, UbahProfile, Hapus, Login, Dashboard, CekPlagiarisme, UploadSkripsi, Logout
+from .views import DaftarMahasiswa, ShowReport, Tambah, Profile, UbahPassword, UbahProfile, Hapus, Login, Dashboard, CekPlagiarisme, UploadSkripsi, Logout
 
 
 urlpatterns = [
@@ -10,12 +10,17 @@ urlpatterns = [
   
   # access admin 
   path('tambah/', Tambah.as_view(), name='tambah'),
-  path('profile/<str:npm>/', Profile.as_view(), name='profile'),
+  
   path('ubah/<str:npm>/', UbahProfile.as_view(), name='ubah_profile'),
   path('hapus/<str:npm>/', Hapus.as_view(), name='hapus'),
+  # <==
+  
+  # access admin and mahasiswa
+  path('profile/<str:npm>/', Profile.as_view(), name='profile'),
   # <==
   
   path('<str:npm>/cek_plagiarisme/', CekPlagiarisme.as_view(), name='cek_plagiarisme'),
   path('<str:npm>/upload/', UploadSkripsi.as_view(), name='upload_skripsi'),
   path('<str:npm>/report/', ShowReport.as_view(), name='report_plagiarism'),
+  path('<str:npm>/ubah_password/', UbahPassword.as_view(), name='ubah_password'),
 ]

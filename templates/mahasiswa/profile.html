@@ -17,6 +17,31 @@
 
 <div class="row justify-content-center">
   <div class="col-sm-8 col-lg-6">
+    {% if messages %}
+    <ul class="messages p-0 text-center">
+      {% for message in messages %}
+
+      {% if message.tags == 'success' %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% elif message.tags == 'error' %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% else %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+
+      {% endfor %}
+    </ul>
+    {% endif %}
+
     <div class="card shadow-lg">
       <h4 class="card-header text-center">Profile Mahasiswa</h4>
       <div class="card-body">
@@ -26,7 +51,8 @@
             class="fas fa-edit"></i> Edit</a>
 
         {% endif %}
-        <a href="#" class="btn-sm btn-info text-decoration-none me-2"><i class="fas fa-key"></i> Ganti
+        <a href="{% url 'mahasiswa:ubah_password' object.npm %}" class="btn-sm btn-info text-decoration-none me-2"><i
+            class="fas fa-key"></i> Ganti
           Password</a>
 
         <div class="d-flex justify-content-center my-3">

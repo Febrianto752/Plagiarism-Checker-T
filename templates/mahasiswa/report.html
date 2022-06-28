@@ -137,7 +137,7 @@
   const scoreSimiliarityElem = document.getElementById('scoreSimiliarity')
   const wrapperBtnCetak = document.getElementById('wrapper-btn-cetak')
   let contentBtnCetak =
-    `<button type="button" class="btn btn-primary" id="cetak" onclick="getPDF()">Cetak</button>`
+    `<button type="button" class="btn btn-primary" id="cetak" onclick="generatePDF()">Cetak</button>`
 
   const btnShowDetailPlagiarismElem = document.getElementById('btnShowDetailPlagiarism')
   const wrapperLinkDetailPlagiarismElem = document.getElementById('wrapper-links-detail-plagiarism')
@@ -256,7 +256,7 @@
 
     })
 
-  function getPDF() {
+  function generatePDF() {
     const reportElem = document.getElementById('report')
 
     const element = document.createElement('div')

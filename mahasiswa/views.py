@@ -223,4 +223,23 @@ class ShowReport(View):
     
     return render(self.request, self.template_name, context)
   
-  
+class UbahPassword(View):
+  template_name = 'mahasiswa/ubah_password.html'
+  context = {
+    'title': 'ubah password'
+  }
+  def get(self, *args, **kwargs):
+    return render(self.request, self.template_name, self.context)
+
+  def post(self, *args, **kwargs):
+    password = self.request.POST['password']
+    confirm_password = self.request.POST['confirm_password']
+    
+    if password != confirm_password:
+      messages.error(self.request, 'password and confirm password dont match!')
+      return redirect('mahasiswa:ubah_password', kwargs['npm'])
+    
+    Mahasiswa.objects.filter(npm=kwargs['npm']).update(password=password)
+    messages.success(self.request, 'berhasil mengubah password akun')
+    return redirect('mahasiswa:profile', kwargs['npm'])
+    
