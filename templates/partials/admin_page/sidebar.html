@@ -25,6 +25,11 @@
           <div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>
           Daftar Mahasiswa
         </a>
+        <a class="nav-link" href="{% url 'plagiarisme:side_by_side_test' %}">
+          <div class="sb-nav-link-icon"><span class="iconify" data-icon="carbon:compare" data-width="20"
+              data-height="20"></span></div>
+          Compare 2 file
+        </a>
 
 
         {% endif %}
@@ -40,7 +45,8 @@
           Profile
         </a>
         <a class="nav-link" href="{% url 'mahasiswa:cek_plagiarisme' request.session.npm %}">
-          <div class="sb-nav-link-icon"><span class="iconify" data-icon="icon-park-outline:radar-three"></span></div>
+          <div class="sb-nav-link-icon"><span class="iconify" data-icon="mdi:file-search-outline" data-width="20"
+              data-height="20"></span></div>
           Cek Plagiarisme
         </a>
         {% endif %}

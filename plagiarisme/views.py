@@ -1,4 +1,5 @@
-from time import time
+import json
+from pdfminer.high_level import extract_text
 from django.http import JsonResponse
 from django.shortcuts import render
 from mahasiswa.models import Mahasiswa, Skripsi
@@ -8,6 +9,7 @@ from administrator.models import DataTraining
 from mahasiswa.models import ReportPlagiarism
 from plagiarisme.packages.rabin import createHashesMD5, createTokens, filterText
 from plagiarisme.packages.utils import convertStringRepresentationOfListToList, get_hash_plagiarism_groups_with_index, get_quadword_from_hash, intersection, make_hash_plagiarism_groups, make_stack_quadword_group, removeTheSameHash
+from .models import SideBySide
 # Create your views here.
 
 # === Tampilan Halaman ===
@@ -72,7 +74,6 @@ def checking(request, npm, iteration, pk, count):
 
   # fingerprint1
   filter_text1 = filterText(skripsi_mahasiswa)
-  # print(filter_text1)
   tokens_text1 = createTokens(filter_text1)
   hashesMD5_text1 = createHashesMD5(tokens_text1)
 
@@ -106,26 +107,10 @@ def checking(request, npm, iteration, pk, count):
     hash_plagiarism_groups = make_hash_plagiarism_groups([],fingerprint_intersection,  data_training)
     report_plagiarism.update(text_similiarity=str(hash_plagiarism_groups), is_done=0)
     print('tiga')
-  
-  # count = jumlah skripsi 
-  # jika iteration = jumlah skripsi - skripsi yang dicek(1)
-  
-  # count = jumlah skripsi 
-  # jika iteration = jumlah skripsi - skripsi yang dicek(1)
+
   if iteration == count:   
     print('hello')   
 
-    # jika ada lebih dari satu skripsi yg dibandingkan
-    # path_dir_report = f'mahasiswa/reports/{npm}_{time.time()}.pdf'
-    # if hash_plagiarism_groups:
-    #   # percent = checkSimiliarity2(unique_hashesMD51, hash_plagiarism_groups)
-    #   percent = 10.23
-    #   print(percent)
-
-    # else:
-    #   # percent = checkSimiliarity2(unique_hashesMD51, unique_hashesMD52)
-    #   percent = 22
-    #   print(percent)
 
     report_plagiarism = ReportPlagiarism.objects.filter(skripsi_id = mahasiswa.skripsi.id)
     report_plagiarism.update(plagiarism_percentage = 101, is_done=1)
@@ -249,16 +234,80 @@ def similiarityOneToOne(request, *args, **kwargs):
 
 
 
-class SideBySide(View):
+class SideBySideView(View):
   template_name = 'plagiarisme/side_by_side.html'
   context = {
     'title': 'test compare side by side'
   }
 
+  def get(self, *args, **kwargs):
+    # self.context['coba'] = [[123],2,3]
+    return render(self.request, self.template_name, self.context)
+  
+  def post(self, *args, **kwargs):
+  
+    # fingerprint1
+    text_file1 = extract_text(self.request.FILES['file1'].file)
+    filter_text1 = filterText(text_file1)
+    
 
 
+    # fingerprint2
+    text_file2 = extract_text(self.request.FILES['file2'].file)
+    filter_text2 = filterText(text_file2)
+    
+    exist_row = SideBySide.objects.filter(inisial=self.request.session['username'])
+    if exist_row.exists():
+      exist_row.update(text_file1 = filter_text1, text_file2=filter_text2)
+    else: 
+      SideBySide.objects.create(inisial=self.request.session['username'], text_file1 = filter_text1, text_file2=filter_text2)
+    
+    
+
+    
+    
+    # self.context['stack_quadword_group'] = json.dumps(stack_quadword_group)
+    self.context['text_file1'] = filter_text1
+    self.context['text_file2'] = filter_text2
+    self.context['finish_upload'] = 'true'
+    # print(json.dumps(stack_quadword_group))
+    
+    return render(self.request, self.template_name, self.context)
+    
+def sideBySidePlagiarismCheck(request, inisial):
+  sideBySideRow = SideBySide.objects.filter(inisial=inisial)
+  
+  if sideBySideRow.exists():
+    text1 = sideBySideRow[0].text_file1   
+    text2 = sideBySideRow[0].text_file2   
+      
+    tokens_text1 = createTokens(text1)
+    hashesMD5_text1 = createHashesMD5(tokens_text1)
+      
+    tokens_text2 = createTokens(text2)
+    hashesMD5_text2 = createHashesMD5(tokens_text2)
+
+    unique_hashesMD51 = removeTheSameHash(hashesMD5_text1)
+    unique_hashesMD52 = removeTheSameHash(hashesMD5_text2)
 
 
+    fingerprint_intersection = intersection(unique_hashesMD51, unique_hashesMD52)
+    # dumy data_training
+    hash_plagiarism_groups = make_hash_plagiarism_groups([],fingerprint_intersection, '')
+    # print(hash_plagiarism_groups)
+    
+    hash_plagiarism_groups_with_index = get_hash_plagiarism_groups_with_index(hash_plagiarism_groups, hashesMD5_text1)
+    # print(hash_plagiarism_groups_with_index)
+    
+    quadword_groups = get_quadword_from_hash(hash_plagiarism_groups_with_index, tokens_text1)
+
+    stack_quadword_group = make_stack_quadword_group(quadword_groups)
+    del stack_quadword_group[0][0]
+  
+    return JsonResponse({'stack_quadword_group': stack_quadword_group, 'text1': text1, 'text2': text2})
+  
+  else:
+    return JsonResponse({'status': 'failed'})
 
 
 

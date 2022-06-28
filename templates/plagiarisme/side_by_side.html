@@ -1,0 +1,149 @@
+{% extends 'admin_page_template.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .frame {
+    height: 500px;
+    overflow: auto;
+  }
+
+  .highlight {
+    background-color: yellow;
+  }
+
+  .overlay-loading {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .5);
+  }
+</style>
+
+<div class="overlay-loading d-none" id="overlayLoading">
+  <div class="spinner-border" role="status" style="width: 100px; height: 100px; margin-top: 50vh;">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<h1 class="text-center mb-5">Side By Side Plagiarism Check</h1>
+
+<p class="text-center mt-3">Similiarity Found : <span id="scoreSimiliarity"></span></p>
+<!-- <p id="tanggal" class="text-center"></p> -->
+<p id="statistic" class="text-center"></p>
+
+<form action="" method="post" enctype="multipart/form-data" id="form">
+  {% csrf_token %}
+  <div class="row justify-content-center border border-3 shadow-sm pb-3">
+    <div class="col col-sm-5">
+      <h4 class="text-overflow my-3 text-center">file 1</h4>
+
+      <p id="text1" class="frame border p-2">
+
+      </p>
+
+      <input type="file" name="file1" required>
+    </div>
+    <div class="col col-sm-5">
+      <h4 class="text-overflow my-3 text-center">file 2</h4>
+      <p id="text2" class="frame border p-2">
+
+      </p>
+
+      <input type="file" name="file2" required>
+
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-success mx-auto d-block my-4" id="btnUpload">Upload</button>
+</form>
+
+<button type="submit" class="btn btn-primary mx-auto d-block my-4" id="btnScanNow">Scan Now</button>
+
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/jquery.highlight.js' %}"></script>
+<script>
+  const text1Elem = document.getElementById('text1')
+  const text2Elem = document.getElementById('text2')
+  const testElem = document.getElementById('test')
+  const btnScanNowElem = document.getElementById('btnScanNow')
+  // const btnUploadElem = document.getElementById('btnUpload')
+  const overlayLoadingElem = document.getElementById('overlayLoading')
+  const formElem = document.getElementById('form')
+  const scoreSimiliarityElem = document.getElementById('scoreSimiliarity')
+  const statisticElem = document.getElementById('statistic')
+
+  formElem.addEventListener('submit', function () {
+    overlayLoadingElem.classList.remove('d-none')
+  })
+  let finishUpload = '{{ finish_upload }}'
+  console.log(finishUpload);
+  if (finishUpload) {
+    text1Elem.innerText = '{{ text_file1 }}'
+    text2Elem.innerText = '{{ text_file2 }}'
+    // tmp = `{{ stack_quadword_group|safe }}`
+    // testElem.textContent = tmp
+    // let stack_quadword_group = JSON.parse(testElem.textContent.trim())
+    // // let stack_quadword_group = Array.from(tmp)
+    // // console.log(stack_quadword_group);
+    // stack_quadword_group[0].forEach((words) => {
+    //   $("#text1").highlight(words);
+    //   $("#text2").highlight(words);
+    // });
+
+  }
+
+  btnScanNowElem.addEventListener('click', function (event) {
+    overlayLoadingElem.classList.remove('d-none')
+
+    fetch(`{% url 'plagiarisme:side_by_side_check' request.session.username %}`)
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson);
+        text1Elem.innerText = responseJson.text1
+        text2Elem.innerText = responseJson.text2
+        responseJson.stack_quadword_group[0].forEach(words => {
+          $("#text1").highlight(words);
+          $("#text2").highlight(words);
+        });
+
+
+
+        let textSkripsi = text1Elem.textContent
+        // console.log(textSkripsi.length);
+        textSkripsi = textSkripsi.replace(/\s+/g, ' ').trim()
+        textSkripsi = textSkripsi.split(' ')
+        let totalAwalKata = textSkripsi.length
+
+        let textOfRemovePlagiarism = text1Elem.innerHTML.replace(new RegExp(
+          '<span class="highlight">[\\d\\D]*?</span>', 'g'), '')
+        textOfRemovePlagiarism = textOfRemovePlagiarism.replace(/\s+/g, ' ').trim()
+        textOfRemovePlagiarism = textOfRemovePlagiarism.split(' ')
+        let jumlahKataSetelahRemoveKataPlagiat = textOfRemovePlagiarism.length
+
+        let jumlahKataPlagiat = totalAwalKata - jumlahKataSetelahRemoveKataPlagiat
+        let percent = ((jumlahKataPlagiat / totalAwalKata) * 100).toFixed(2)
+        scoreSimiliarityElem.innerText = `${percent} %`
+        console.log(percent);
+        console.log(`percent : ${percent}%`);
+        console.log(`total kata : ${totalAwalKata}`);
+        console.log('jumlah kata plagiat : ', jumlahKataPlagiat);
+
+
+
+        // const statisticElem = document.getElementById('statistic')
+        statisticElem.innerText =
+          `Statistics : ${jumlahKataPlagiat} words plagiarized / ${totalAwalKata} total word document`
+
+        overlayLoadingElem.classList.add('d-none')
+      })
+  })
+</script>
+
+<br><br><br><br><br><br><br><br><br><br>
+{% endblock content %}

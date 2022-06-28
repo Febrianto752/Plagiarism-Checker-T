@@ -240,7 +240,7 @@ class HapusDataTraining(View):
 
 
   
-  
+
 
 
 
