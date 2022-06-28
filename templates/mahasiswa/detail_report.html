@@ -1,0 +1,129 @@
+{% extends 'admin_page_template.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+  .frame {
+    height: 80vh;
+    overflow-y: auto;
+  }
+
+  .highlight {
+    background-color: yellow;
+  }
+
+  .overlay-loading {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .5);
+  }
+
+  .text-overflow {
+    white-space: nowrap;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+
+
+<div class="overlay-loading">
+  <div class="spinner-border" role="status" style="width: 100px; height: 100px; margin-top: 50vh;">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div class="row mb-5">
+  <div class="col">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'administrator:report_plagiarism' mahasiswa.npm %}">Report
+            plagiarism</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ mahasiswa.nama_lengkap }} &
+          {{ other_mahasiswa.nama_lengkap }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+
+<h3 class="text-center">Kemiripan Skripsi <span class="text-overflow">{{ mahasiswa.nama_lengkap }}</span> terhadap <span
+    class="text-overflow">{{ other_mahasiswa.nama_lengkap }}</span></h3>
+
+<p class="text-center mt-3">Similiarity Found : <span id="scoreSimiliarity"></span></p>
+<p id="statistic" class="text-center"></p>
+
+
+<div class="row justify-content-center border border-3 shadow-sm">
+  <div class="col">
+    <h4 class="text-overflow mb-3">{{ mahasiswa.nama_lengkap }}</h4>
+
+    <p id="skripsi-mhs" class="frame border p-2">
+      {{ skripsi_mhs }}
+    </p>
+  </div>
+  <div class="col">
+    <h4 class="text-overflow mb-3">{{ other_mahasiswa.nama_lengkap }}</h4>
+    <p id="skripsi-other-mhs" class="frame border p-2">
+      {{ skripsi_other_mhs }}
+    </p>
+  </div>
+</div>
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'js/jquery.highlight.js' %}"></script>
+
+<script>
+  const scoreSimiliarityElem = document.getElementById('scoreSimiliarity')
+  const inputTextElem2 = document.getElementById('skripsi-mhs')
+  let textSkripsi = inputTextElem2.textContent
+  textSkripsi = textSkripsi.replace(/\s+/g, ' ').trim()
+  textSkripsi = textSkripsi.split(' ')
+  console.log(textSkripsi.length);
+  fetch(`{% url 'plagiarisme:similiarity_one_to_one' mahasiswa.npm other_mahasiswa.npm %}`)
+    .then(response => response.json())
+    .then(responseJson => {
+      console.log(responseJson);
+      responseJson.stack_quadword_group.forEach(words => {
+        $("#skripsi-mhs").highlight(words);
+        $("#skripsi-other-mhs").highlight(words);
+      });
+      const inputTextElem = document.getElementById('skripsi-mhs')
+      let textSkripsi = inputTextElem.textContent
+      // console.log(textSkripsi.length);
+      textSkripsi = textSkripsi.replace(/\s+/g, ' ').trim()
+      textSkripsi = textSkripsi.split(' ')
+      let totalAwalKata = textSkripsi.length
+
+      let textOfRemovePlagiarism = inputTextElem.innerHTML.replace(new RegExp(
+        '<span class="highlight">[\\d\\D]*?</span>', 'g'), '')
+      textOfRemovePlagiarism = textOfRemovePlagiarism.replace(/\s+/g, ' ').trim()
+      textOfRemovePlagiarism = textOfRemovePlagiarism.split(' ')
+      let jumlahKataSetelahRemoveKataPlagiat = textOfRemovePlagiarism.length
+
+      let jumlahKataPlagiat = totalAwalKata - jumlahKataSetelahRemoveKataPlagiat
+      let percent = ((jumlahKataPlagiat / totalAwalKata) * 100).toFixed(2)
+      scoreSimiliarityElem.innerText = `${percent} %`
+      console.log(percent);
+      console.log(`percent : ${percent}%`);
+      console.log(`total kata : ${totalAwalKata}`);
+      console.log('jumlah kata plagiat : ', jumlahKataPlagiat);
+
+
+
+      const statisticElem = document.getElementById('statistic')
+      statisticElem.innerText =
+        `Statistics : ${jumlahKataPlagiat} words plagiarized / ${totalAwalKata} total word document`
+
+
+      const overlayLoadingElem = document.getElementsByClassName('overlay-loading')[0]
+      overlayLoadingElem.style.display = 'none'
+
+    })
+</script>
+{% endblock content %}

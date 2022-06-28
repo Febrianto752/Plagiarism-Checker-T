@@ -1,5 +1,5 @@
 from django.urls import path 
-from .views import DaftarMahasiswa, Tambah, Profile, UbahProfile, Hapus, Login, Dashboard, CekPlagiarisme, UploadSkripsi, Logout
+from .views import DaftarMahasiswa, ShowReport, Tambah, Profile, UbahProfile, Hapus, Login, Dashboard, CekPlagiarisme, UploadSkripsi, Logout
 
 
 urlpatterns = [
@@ -16,5 +16,6 @@ urlpatterns = [
   # <==
   
   path('<str:npm>/cek_plagiarisme/', CekPlagiarisme.as_view(), name='cek_plagiarisme'),
-  path('<str:npm>/upload/', UploadSkripsi.as_view(), name='upload_skripsi')
+  path('<str:npm>/upload/', UploadSkripsi.as_view(), name='upload_skripsi'),
+  path('<str:npm>/report/', ShowReport.as_view(), name='report_plagiarism'),
 ]

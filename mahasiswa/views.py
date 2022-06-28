@@ -1,4 +1,7 @@
 from django.shortcuts import render, redirect
+from administrator.models import DataTraining
+
+from mahasiswa.forms import SkripsiForm
 from .models import Mahasiswa, Skripsi 
 from django.views.generic import ListView, View, DetailView, RedirectView
 from django.contrib import messages
@@ -149,28 +152,72 @@ class CekPlagiarisme(DetailView):
     return super().get(*args, **kwargs)
   
   def get_context_data(self,*args, **kwargs):
+    jumlah_data_training = DataTraining.objects.all().count()
     context = super().get_context_data(**kwargs) 
     context['title'] = 'cek plagiarisme'
+    context['jumlah_data_training'] = jumlah_data_training
     return context
   
   
 class UploadSkripsi(View):
   template_name = 'mahasiswa/upload_skripsi.html'
-  context = {
-    'title': 'upload skripsi'
-  }
+  # context = {
+  #   'title': 'upload skripsi'
+  # }
+  
+  def get(self, request, *args, **kwargs):
+    if 'npm' not in request.session:
+      return redirect('mahasiswa:login')
+    
+    mahasiswa = Mahasiswa.objects.get(npm=kwargs['npm'])
+    
+    skripsi_form = SkripsiForm()
+    context = {
+      'title': 'upload skripsi',
+      'mahasiswa': mahasiswa,
+      'skripsi_form': skripsi_form,
+    }
+
+    return render(request, self.template_name, context)
+
+  def post(self, *args, **kwargs):
+
+    mahasiswa = Mahasiswa.objects.get(npm=self.request.POST['npm'])
+    skripsi_mahasiswa = Skripsi.objects.filter(mahasiswa_id=mahasiswa.id)
+
+    if skripsi_mahasiswa.exists():
+      form = SkripsiForm(self.request.POST, self.request.FILES, instance=Skripsi.objects.get(mahasiswa_id=mahasiswa.id))
+    else:
+      form = SkripsiForm(self.request.POST, self.request.FILES)
+    
+    if form.is_valid():
+      try:
+        form.save()
+        
+      except:
+        messages.error(self.request, 'file yang anda upload harus pdf...') # mengirimkan flash message error
+        return redirect('mahasiswa:upload_skripsi', self.request.POST['npm'])
+      
+      messages.success(self.request, 'Berhasil Mengupload...')
+      return redirect('mahasiswa:upload_skripsi', self.request.POST['npm'])
+    
+class ShowReport(View):
+  template_name = 'mahasiswa/report.html'
+  
   
   def get(self, *args, **kwargs):
+    if 'npm' not in self.request.session:
+      return redirect('mahasiswa:login')
     
-    return render(self.request, self.template_name, self.context)
-  
-  def post(self, *args, **kwargs):
-    npm = self.request.POST['npm']
-    pdf = self.request.FILES['pdf']
+    mahasiswa = Mahasiswa.objects.get(npm=kwargs['npm'])
+    skripsi_mhs = Skripsi.objects.get(mahasiswa_id = mahasiswa.id)
     
-    mahasiswa = Mahasiswa.objects.get(npm=npm)
-    print(mahasiswa.id)
-    Skripsi.objects.create(pdf=pdf, mahasiswa_id=mahasiswa.id)
     
-    messages.success(self.request, 'berhasil mengupload skripsi!!')
-    return redirect('mahasiswa:upload_skripsi', npm)
+    context = {
+      'title' : 'report check plagiarism',
+      'content_skripsi':skripsi_mhs.content.replace('?',''),
+      'mahasiswa': mahasiswa,
+      'npm': kwargs['npm']
+    }
+    
+    return render(self.request, self.template_name, context)

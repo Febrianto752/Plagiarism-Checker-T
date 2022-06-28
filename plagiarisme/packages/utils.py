@@ -157,13 +157,14 @@ def stack_quad_word(nword):
 
 
 # ------------- NEW ------------------
-def make_hash_plagiarism_groups(hash_groups:list, new_hashes:list, npm:str):
+def make_hash_plagiarism_groups(hash_groups:list, new_hashes:list, object):
   # contoh hash group : [['satu', 1,2,5], ['dua', 3,4,6], ['tiga', 9,8,7]]
   # contoh new_hashes = [hash1, hash2]
   
   # jika hash_groups masih kosong 
+  source = f'{object.penulis}. "{object.judul}". {object.tahun}'
   if len(hash_groups) == 0:
-    first_group = [npm, *new_hashes]
+    first_group = [source, *new_hashes]
     hash_groups.append(first_group)
     # output : [[values]]
   
@@ -177,7 +178,7 @@ def make_hash_plagiarism_groups(hash_groups:list, new_hashes:list, npm:str):
       
       new_group = [*new_group, *[new_hash for new_hash in new_hashes if new_hash not in tmp_all_group and new_hash not in new_group]]
 
-    new_group.insert(0, npm)      
+    new_group.insert(0, source)      
     hash_groups.append(new_group)    
       
       

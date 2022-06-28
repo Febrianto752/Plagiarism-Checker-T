@@ -18,7 +18,8 @@
     <div class="card shadow-sm">
       <h5 class="card-header text-center">Plagiarism Checker F</h5>
       <div class="card-body">
-        <p>Hasil Cek Plagiarisme : <a href="#" class="btn-sm btn-success text-decoration-none">Belum Ada</a></p>
+        <p>Hasil Cek Plagiarisme : <a href="#" class="btn-sm btn-success text-decoration-none"
+            id="linkDownloadReport">Belum Ada</a></p>
         <p class="d-flex align-content-center">File Skripsi :
 
           {% if object.skripsi.pdf %}
@@ -34,7 +35,7 @@
           Skripsi</a>
         <p class="text-center mt-5">Ayo Buktikan Orisinalitas Karya mu!!</p>
         <hr>
-        <button class="btn btn-primary d-block w-25 mx-auto">Cek Plagiarisme</button>
+        <button class="btn btn-primary d-block w-25 mx-auto" id="btnCekPlagiat">Cek Plagiarisme</button>
 
         <div class="row mt-3">
           <div class="col">
@@ -55,7 +56,100 @@
 </div>
 
 <script>
+  const btnCekPlagiatElem = document.getElementById('btnCekPlagiat')
+  const progressBarCekPlagElem = document.getElementById('progressCekPlag')
+  const checkMessageElem = document.getElementById('checkMessage')
+  const processingMessageElem = document.getElementById('processingMessage')
+  const linkDownloadReportElem = document.getElementById('linkDownloadReport')
 
+  function checkingPlagiarism({
+    npm,
+    iteration,
+    pk,
+    jumlah_data_training
+  }) {
+    if (progressBarCekPlagElem.parentElement.classList.contains('d-none')) {
+      progressBarCekPlagElem.parentElement.classList.remove('d-none')
+      processingMessageElem.classList.remove('d-none')
+    }
+    progressBarCekPlagElem.style = `width: ${(iteration/(jumlah_data_training-1))*100}%`
+
+    return fetch(`http://127.0.0.1:8000/plagiarisme/${npm}/${iteration}/${pk}/${jumlah_data_training}`)
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson);
+        if (responseJson.error) {
+          if (responseJson.error == 1) {
+            console.log('mahasiswa harus upload file skripsi terlebih dahulu!!');
+            checkMessageElem.classList.remove('d-none')
+            checkMessageElem.innerText = 'Silakan Upload File Skripsi Terlebih dahulu...'
+          } else if (responseJson.error == 2) {
+            checkMessageElem.classList.remove('d-none')
+            checkMessageElem.innerText = 'data tidak ditemukan'
+          }
+        } else if (responseJson.is_done == true) {
+
+          btnCekPlagiatElem.classList.remove('disabled')
+
+          processingMessageElem.innerText = 'Completed'
+          console.log('selesai');
+          progressBarCekPlagElem.style = `width: ${(iteration/(jumlah_data_training-1))*100}%`
+
+
+          linkDownloadReportElem.setAttribute('href', `{% url 'mahasiswa:report_plagiarism' object.npm %}`)
+          linkDownloadReportElem.innerText = 'Show Report'
+          linkDownloadReportElem.classList.remove('btn-secondary')
+          linkDownloadReportElem.classList.add('btn-success')
+          window.location.href = "{% url 'mahasiswa:report_plagiarism' object.npm %}";
+        } else {
+
+          progressBarCekPlagElem.style = `width: ${(iteration/(jumlah_data_training-1))*100}%`
+
+          let checking = {
+            npm: '{{ object.npm }}',
+            jumlah_data_training: '{{ jumlah_data_training }}',
+            iteration: iteration + 1,
+            pk: responseJson.pk
+          }
+          // return checkingPlagiarism(npm, jumlah_data_training, iteration + 1, responseJson.pk)
+          return checkingPlagiarism(checking)
+        }
+      })
+  }
+
+
+  btnCekPlagiatElem.addEventListener('click', function (event) {
+    linkDownloadReportElem.setAttribute('disabled', 'on')
+    if (linkDownloadReportElem.getAttribute('class').split(' ').includes('btn-success')) {
+      linkDownloadReportElem.classList.remove('btn-success')
+      linkDownloadReportElem.classList.add('btn-secondary')
+    }
+    this.classList.add('disabled')
+    if (progressBarCekPlagElem.parentElement.classList.contains('d-none')) {
+      progressBarCekPlagElem.parentElement.classList.remove('d-none')
+      processingMessageElem.classList.remove('d-none')
+    }
+    progressBarCekPlagElem.style = `width: 0%`
+
+
+    setTimeout(() => {
+      if (!checkMessageElem.classList.contains('d-none')) {
+        progressBarCekPlagElem.parentElement.classList.add('d-none')
+        processingMessageElem.classList.add('d-none')
+        this.classList.remove('disabled')
+      }
+    }, 1000)
+
+    let checking = {
+      npm: '{{ object.npm }}',
+      jumlah_data_training: '{{ jumlah_data_training }}',
+      iteration: 1,
+      pk: 1
+    }
+    checkingPlagiarism(checking)
+
+
+  })
 </script>
 
 {% endblock content %}
