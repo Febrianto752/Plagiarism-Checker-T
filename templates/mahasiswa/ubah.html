@@ -55,9 +55,12 @@
               {% for jurusan in jurusan_jurusan %}
 
               {% if jurusan == mahasiswa.jurusan %}
+
               <option value="{{ jurusan }}" selected>{{ jurusan }}</option>
-              {% endif %}
+              {% else %}
               <option value="{{ jurusan }}">{{ jurusan }}</option>
+
+              {% endif %}
 
               {% endfor %}
 

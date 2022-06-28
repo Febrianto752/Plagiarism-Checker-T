@@ -86,6 +86,7 @@ class UbahProfile(View):
   def get(self, *args, **kwargs):
     mahasiswa = Mahasiswa.objects.get(npm=kwargs['npm'])
     self.context['mahasiswa'] = mahasiswa
+    self.context['jurusan_jurusan'] = JURUSAN_JURUSAN
     
     return render(self.request, self.template_name, self.context)
 
