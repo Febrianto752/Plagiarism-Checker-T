@@ -18,8 +18,18 @@
     <div class="card shadow-sm">
       <h5 class="card-header text-center">Plagiarism Checker F</h5>
       <div class="card-body">
-        <p>Hasil Cek Plagiarisme : <a href="#" class="btn-sm btn-success text-decoration-none"
-            id="linkDownloadReport">Belum Ada</a></p>
+        <p>Hasil Cek Plagiarisme :
+
+          {% if object.skripsi.reportplagiarism.is_done %}
+          <a href="{% url 'mahasiswa:report_plagiarism' object.npm %}" class="btn-sm btn-success text-decoration-none"
+            id="linkDownloadReport">show report</a>
+
+          {% else %}
+          <a href="#" class="btn-sm btn-secondary text-decoration-none" id="linkDownloadReport">Belum Ada</a>
+
+          {% endif %}
+
+        </p>
         <p class="d-flex align-content-center">File Skripsi :
 
           {% if object.skripsi.pdf %}
@@ -35,7 +45,8 @@
           Skripsi</a>
         <p class="text-center mt-5">Ayo Buktikan Orisinalitas Karya mu!!</p>
         <hr>
-        <button class="btn btn-primary d-block w-25 mx-auto" id="btnCekPlagiat">Cek Plagiarisme</button>
+        <button class="btn btn-primary d-block mx-auto" id="btnCekPlagiat" style="min-width: fit-content;">Cek
+          Plagiarisme</button>
 
         <div class="row mt-3">
           <div class="col">
