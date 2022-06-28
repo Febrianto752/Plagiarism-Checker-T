@@ -216,9 +216,11 @@ class ShowReport(View):
     
     context = {
       'title' : 'report check plagiarism',
-      'content_skripsi':skripsi_mhs.content.replace('?',''),
+      'content_skripsi':skripsi_mhs.content,
       'mahasiswa': mahasiswa,
       'npm': kwargs['npm']
     }
     
     return render(self.request, self.template_name, context)
+  
+  

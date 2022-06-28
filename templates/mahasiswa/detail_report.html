@@ -42,18 +42,18 @@
   <div class="col">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'administrator:report_plagiarism' mahasiswa.npm %}">Report
+        <li class="breadcrumb-item"><a href="{% url 'mahasiswa:report_plagiarism' mahasiswa.npm %}">Report
             plagiarism</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ mahasiswa.nama_lengkap }} &
-          {{ other_mahasiswa.nama_lengkap }}</li>
+        <li class="breadcrumb-item active" aria-current="page">{{ mahasiswa.nama }} &
+          ({{ data_training.penulis }}, {{ data_training.tahun }})</li>
       </ol>
     </nav>
   </div>
 </div>
 
 
-<h3 class="text-center">Kemiripan Skripsi <span class="text-overflow">{{ mahasiswa.nama_lengkap }}</span> terhadap <span
-    class="text-overflow">{{ other_mahasiswa.nama_lengkap }}</span></h3>
+<h3 class="text-center">Kemiripan Skripsi <span class="text-overflow">{{ mahasiswa.nama }}</span> terhadap <span
+    class="text-overflow">({{ data_training.penulis }}, {{ data_training.tahun }})</span></h3>
 
 <p class="text-center mt-3">Similiarity Found : <span id="scoreSimiliarity"></span></p>
 <p id="statistic" class="text-center"></p>
@@ -61,16 +61,16 @@
 
 <div class="row justify-content-center border border-3 shadow-sm">
   <div class="col">
-    <h4 class="text-overflow mb-3">{{ mahasiswa.nama_lengkap }}</h4>
+    <h4 class="text-overflow mb-3">{{ mahasiswa.nama }}</h4>
 
     <p id="skripsi-mhs" class="frame border p-2">
-      {{ skripsi_mhs }}
+      {{ text_skripsi_mhs }}
     </p>
   </div>
   <div class="col">
-    <h4 class="text-overflow mb-3">{{ other_mahasiswa.nama_lengkap }}</h4>
+    <h4 class="text-overflow mb-3">({{ data_training.penulis }}, {{ data_training.tahun }})</h4>
     <p id="skripsi-other-mhs" class="frame border p-2">
-      {{ skripsi_other_mhs }}
+      {{ text_data_training }}
     </p>
   </div>
 </div>
@@ -85,7 +85,7 @@
   textSkripsi = textSkripsi.replace(/\s+/g, ' ').trim()
   textSkripsi = textSkripsi.split(' ')
   console.log(textSkripsi.length);
-  fetch(`{% url 'plagiarisme:similiarity_one_to_one' mahasiswa.npm other_mahasiswa.npm %}`)
+  fetch(`{% url 'plagiarisme:similiarity_one_to_one' mahasiswa.npm data_training.id %}`)
     .then(response => response.json())
     .then(responseJson => {
       console.log(responseJson);

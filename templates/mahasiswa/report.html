@@ -246,14 +246,13 @@
         console.log(`total kata : ${totalAwalKata}`);
         console.log(`jumlah kata perhighlight ${index} : ${jumlahKataPlagiat}`);
 
-        // item = ['highlightX', 'npm']
+        // item = ['highlightX', [idDataTraining, info_data_training]]
         wrapperLinkDetailPlagiarismElem.innerHTML += `
-        <li class="list-group-item"><a href="http://127.0.0.1:8000/plagiarisme/detail/{{ npm }}/${item[1]}/"
-          class="${item[0]}"><strong>${percent}%</strong> from
-          data - ${item[1]}</a>
+        <li class="list-group-item"><a href="http://127.0.0.1:8000/plagiarisme/detail/{{ npm }}/${item[1][0]}/"
+          class="${item[0]}"><strong>${percent}%</strong> from : 
+          ${item[1][1]}</a>
         </li>`
       })
-
 
     })
 

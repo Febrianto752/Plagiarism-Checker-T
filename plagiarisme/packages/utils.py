@@ -162,7 +162,7 @@ def make_hash_plagiarism_groups(hash_groups:list, new_hashes:list, object):
   # contoh new_hashes = [hash1, hash2]
   
   # jika hash_groups masih kosong 
-  source = f'{object.penulis}. "{object.judul}". {object.tahun}'
+  source = [object.id,f'{object.penulis}. "{object.judul}". {object.tahun}']
   if len(hash_groups) == 0:
     first_group = [source, *new_hashes]
     hash_groups.append(first_group)

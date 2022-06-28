@@ -167,3 +167,84 @@ def setPlagiarismPercentage(request, *args, **kwargs):
   mahasiswa.skripsi.reportplagiarism.save()
   
   return JsonResponse({'status': 'success'})
+
+
+
+
+
+# Halaman detail plagiarism 
+class SimiliarityBetweenTwoThesis(View):
+  # template_name = 'admin/mahasiswa/detail_report.html'
+  
+  def get(self, *args, **kwargs):
+    if 'username' in self.request.session:
+      self.template_name = 'admin/mahasiswa/detail_report.html'
+    elif 'npm' in self.request.session:
+      self.template_name = 'mahasiswa/detail_report.html'
+    elif 'nidn' in self.request.session:
+      self.template_name = 'plagiarisme/detail_report.html'
+      
+    npm_mhs = kwargs['npm_mhs']
+    id_data_training = kwargs['id_data_training']
+    
+    mahasiswa = Mahasiswa.objects.get(npm = npm_mhs)
+    # skripsi_mhs = Skripsi.objects.get(mahasiswa_id = mahasiswa.id)
+    content_skripsi_mhs = mahasiswa.skripsi.content
+    
+    data_training = DataTraining.objects.get(id = id_data_training)
+    # skripsi_other_mhs = Skripsi.objects.get(mahasiswa_id = other_mahasiswa.id)
+    text_data_training = data_training.text_file
+    
+    
+
+    context = {
+      'title': 'plagiarism between of two thesis',
+      'text_skripsi_mhs': content_skripsi_mhs,
+      'text_data_training': text_data_training,
+      'mahasiswa': mahasiswa,
+      'data_training': data_training
+    }
+    
+    return render(self.request, self.template_name, context)
+
+def similiarityOneToOne(request, *args, **kwargs):
+  npm_mhs = kwargs['npm_mhs']
+  id_data_training = kwargs['id_data_training']
+  
+  mahasiswa = Mahasiswa.objects.get(npm = npm_mhs)
+  # skripsi_mhs = Skripsi.objects.get(mahasiswa_id = mahasiswa.id)
+  content_skripsi_mhs = mahasiswa.skripsi.content
+  
+  data_training = DataTraining.objects.get(id = id_data_training)
+  # skripsi_other_mhs = Skripsi.objects.get(mahasiswa_id = other_mahasiswa.id)
+  text_data_training = data_training.text_file
+  
+  # fingerprint1
+  filter_text1 = filterText(content_skripsi_mhs)
+  # print(filter_text1)
+  tokens_text1 = createTokens(filter_text1)
+  hashesMD5_text1 = createHashesMD5(tokens_text1)
+
+
+  # fingerprint2
+  filter_text2 = filterText(text_data_training)
+  tokens_text2 = createTokens(filter_text2)
+  hashesMD5_text2 = createHashesMD5(tokens_text2)
+
+  unique_hashesMD51 = removeTheSameHash(hashesMD5_text1)
+  unique_hashesMD52 = removeTheSameHash(hashesMD5_text2)
+
+
+  fingerprint_intersection = intersection(unique_hashesMD51, unique_hashesMD52)
+  hash_plagiarism_groups = make_hash_plagiarism_groups([],fingerprint_intersection, data_training)
+  # print(hash_plagiarism_groups)
+  
+  hash_plagiarism_groups_with_index = get_hash_plagiarism_groups_with_index(hash_plagiarism_groups, hashesMD5_text1)
+  # print(hash_plagiarism_groups_with_index)
+  
+  quadword_groups = get_quadword_from_hash(hash_plagiarism_groups_with_index, tokens_text1)
+
+  stack_quadword_group = make_stack_quadword_group(quadword_groups)
+  del stack_quadword_group[0][0]
+  return JsonResponse({'stack_quadword_group': stack_quadword_group[0]})
+
