@@ -18,18 +18,22 @@
     <div class="card shadow-sm">
       <h5 class="card-header text-center">Plagiarism Checker F</h5>
       <div class="card-body">
-        <p>Hasil Cek Plagiarisme :
+        <p class="d-inline block">Hasil Cek Plagiarisme : </p>
 
-          {% if object.skripsi.reportplagiarism.is_done %}
-          <a href="{% url 'mahasiswa:report_plagiarism' object.npm %}" class="btn-sm btn-success text-decoration-none"
-            id="linkDownloadReport">show report</a>
+        {% if object.skripsi.reportplagiarism.is_done %}
+        <form action="{% url 'mahasiswa:report_plagiarism' object.npm %}" method="get" class="d-inline-block mb-3">
+          {% csrf_token %}
+          <button class="btn-sm btn-success text-decoration-none" id="linkDownloadReport">show report</button>
+        </form>
+        <!-- <a href="{% url 'mahasiswa:report_plagiarism' object.npm %}" class="btn-sm btn-success text-decoration-none"
+            id="linkDownloadReport">show report</a> -->
 
-          {% else %}
-          <a href="#" class="btn-sm btn-secondary text-decoration-none" id="linkDownloadReport">Belum Ada</a>
+        {% else %}
+        <a href="#" class="btn-sm btn-secondary text-decoration-none" id="linkDownloadReport">Belum Ada</a>
 
-          {% endif %}
+        {% endif %}
 
-        </p>
+
         <p class="d-flex align-content-center">File Skripsi :
 
           {% if object.skripsi.pdf %}
@@ -41,8 +45,13 @@
           {% endif %}
 
         </p>
-        <a href="{% url 'mahasiswa:upload_skripsi' request.session.npm %}" class="btn btn-warning mb-3">Upload File
-          Skripsi</a>
+        <form action="{% url 'mahasiswa:upload_skripsi' request.session.npm %}" method="get"
+          class="d-inline-block mb-3">
+          {% csrf_token %}
+          <button class="btn btn-warning mb-3" id="btnUploadFile">Upload File
+            Skripsi</button>
+        </form>
+
         <p class="text-center mt-5">Ayo Buktikan Orisinalitas Karya mu!!</p>
         <hr>
         <button class="btn btn-primary d-block mx-auto" id="btnCekPlagiat" style="min-width: fit-content;">Cek
@@ -72,6 +81,7 @@
   const checkMessageElem = document.getElementById('checkMessage')
   const processingMessageElem = document.getElementById('processingMessage')
   const linkDownloadReportElem = document.getElementById('linkDownloadReport')
+  const btnUploadFileElem = document.getElementById('btnUploadFile')
 
   function checkingPlagiarism({
     npm,
@@ -131,6 +141,7 @@
 
   btnCekPlagiatElem.addEventListener('click', function (event) {
     linkDownloadReportElem.setAttribute('disabled', 'on')
+    btnUploadFileElem.setAttribute('disabled', 'on')
     if (linkDownloadReportElem.getAttribute('class').split(' ').includes('btn-success')) {
       linkDownloadReportElem.classList.remove('btn-success')
       linkDownloadReportElem.classList.add('btn-secondary')
