@@ -127,6 +127,35 @@ class Hapus(View):
     return redirect('administrator:daftar_admin')
 
 
+class UbahProfile(View):
+  template_name = 'admin/ubah_profile.html'
+  context = {
+    'title': 'ubah profile admin'
+  }
+  
+  def get(self, *args, **kwargs):
+    if 'username' not in self.request.session:
+      return redirect('/')
+    
+    admin = Admin.objects.get(username=self.request.session['username'])
+    self.context['admin'] = admin
+    return render(self.request, self.template_name, self.context)
+  
+  def post(self, *args, **kwargs):
+    nama = self.request.POST['nama']
+    email = self.request.POST['email']
+    no_telp = self.request.POST['no_telp']
+    
+    Admin.objects.filter(username=kwargs['username']).update(nama=nama, email=email, no_telp=no_telp)
+    messages.success(self.request, 'berhasil mengubah profile')
+    return redirect('administrator:profile')
+  
+
+
+
+
+
+
 # ===== Data Trainings =====
 class DataTrainings(ListView):
   template_name = 'admin/data_trainings.html'

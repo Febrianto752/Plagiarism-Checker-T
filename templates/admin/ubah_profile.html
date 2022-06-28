@@ -34,23 +34,28 @@
     {% endif %}
 
     <div class="card shadow-lg">
-      <h4 class="card-header text-center">Ubah Password Akun Mahasiswa</h4>
+      <h4 class="card-header text-center">Ubah Profile Akun</h4>
       <div class="card-body">
 
         <form action="" method="post">
           {% csrf_token %}
           <div class="mb-3">
-            <label for="password" class="form-label">Password Baru</label>
-            <input type="password" class="form-control" id="password" name="password"
-              placeholder="Masukan Password Baru..." required>
+            <label for="nama" class="form-label">Nama</label>
+            <input type="text" class="form-control" id="nama" name="nama" value="{{ admin.nama }}"
+              placeholder="Masukan Nama..." required>
           </div>
           <div class="mb-3">
-            <label for="confirm_password" class="form-label">Confirm Password</label>
-            <input type="password" class="form-control" id="confirm_password" name="confirm_password"
-              placeholder="Masukan Confirm Password..." required>
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" value="{{ admin.email }}"
+              placeholder="Masukan Email..." required>
+          </div>
+          <div class="mb-3">
+            <label for="no_telp" class="form-label">Nomor Telephone</label>
+            <input type="number" class="form-control" id="no_telp" name="no_telp" value="{{ admin.no_telp }}"
+              placeholder="Masukan no_telp..." required>
           </div>
 
-          <button class="btn btn-primary">Ubah Password</button>
+          <button class="btn btn-primary">Ubah Profile</button>
         </form>
 
 

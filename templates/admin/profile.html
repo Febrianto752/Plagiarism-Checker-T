@@ -7,9 +7,35 @@
 
 <div class="row justify-content-center">
   <div class="col-sm-8 col-lg-6">
+    {% if messages %}
+    <ul class="messages p-0 text-center">
+      {% for message in messages %}
+
+      {% if message.tags == 'success' %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% elif message.tags == 'error' %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% else %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+
+      {% endfor %}
+    </ul>
+    {% endif %}
     <div class="card shadow-lg">
       <h4 class="card-header text-center">Your Profile</h4>
       <div class="card-body">
+        <a href="{% url 'administrator:ubah_profile' request.session.username %}"
+          class="btn-sm btn-warning text-decoration-none me-2"><i class="fas fa-edit"></i> Edit Profile</a>
         <div class="d-flex justify-content-center mb-3">
           <img src="/media/user.png" class="img-thumbnail" alt="profile" width="200px">
         </div>

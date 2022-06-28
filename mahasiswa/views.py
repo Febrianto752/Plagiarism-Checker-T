@@ -229,8 +229,9 @@ class UbahPassword(View):
     'title': 'ubah password'
   }
   def get(self, *args, **kwargs):
-    if self.request.session['npm'] != kwargs['npm']:
-      return redirect('/error')
+    if 'npm' in self.request.session:      
+      if self.request.session['npm'] != kwargs['npm']:
+        return redirect('/error')
  
     
     return render(self.request, self.template_name, self.context)
