@@ -21,8 +21,8 @@ class Admin(models.Model):
     db_table = 'administrator'
     
 class DataTraining(models.Model):
-  judul = models.CharField(max_length=30, null=True)
-  penulis = models.CharField(max_length=30, null=True)
+  judul = models.CharField(max_length=70, null=True)
+  penulis = models.CharField(max_length=50, null=True)
   tahun = models.IntegerField(null=True)
   text_file = models.TextField()
   file = models.FileField(upload_to='data_trainings/')

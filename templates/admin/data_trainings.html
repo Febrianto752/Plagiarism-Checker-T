@@ -59,7 +59,9 @@
         {% for data_training in object_list %}
         <tr>
           <th scope="row">{{ forloop.counter }}</th>
-          <td>{{ data_training.judul }}</td>
+          <td>
+            <div class="text-overflow">{{ data_training.judul }}</div>
+          </td>
           <td>{{ data_training.penulis }}</td>
 
           <td>{{ data_training.tahun }}</td>

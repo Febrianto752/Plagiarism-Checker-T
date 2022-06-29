@@ -1,6 +1,27 @@
 {% extends 'admin_page_template.html' %}
 
 {% block content %}
+<style>
+  .overlay-loading {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    position: absolute;
+    z-index: 5;
+    top: -20px;
+    /* bottom: 0; */
+    height: 100vh;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .5);
+  }
+</style>
+<div class="overlay-loading d-none" id="overlayLoading">
+  <div class="spinner-border" role="status" style="width: 100px; height: 100px; margin-top: 50vh;">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
 <nav aria-label="breadcrumb my-3">
   <ol class="breadcrumb justify-content-center">
     <li class="breadcrumb-item"><a href="{% url 'administrator:data_trainings' %}">Daftar Data Training</a></li>
@@ -42,32 +63,48 @@
       <div class="card-body">
         <form action="" method="post" enctype="multipart/form-data">
           {% csrf_token %}
-          <!-- <div class="mb-3">
-            <label for="text" class="form-label">Judul</label>
-            <input type="text" class="form-control" id="judul" name="judul" placeholder="Masukan judul.. " required>
+          <div class="mb-3">
+            <label for="{{ data_training_form.judul.id_for_label }}"
+              class="form-label">{{ data_training_form.judul.label_tag }}</label>
+            <!-- <input type="text" class="form-control" id="judul" name="judul" placeholder="Masukan judul.. " required> -->
+            {{ data_training_form.judul }}
           </div>
           <div class="mb-3">
-            <label for="text" class="form-label">Penulis</label>
-            <input type="text" class="form-control" id="penulis" name="penulis" placeholder="Masukan penulis.. "
-              required>
+            <label for="{{ data_training_form.penulis.id_for_label }}"
+              class="form-label">{{ data_training_form.penulis.label_tag }}</label>
+            <!-- <input type="text" class="form-control" id="penulis" name="penulis" placeholder="Masukan penulis.. "
+              required> -->
+            {{ data_training_form.penulis }}
           </div>
           <div class="mb-3">
-            <label for="tahun" class="form-label">Tahun</label>
-            <input type="text" class="form-control" id="tahun" name="tahun" placeholder="Masukan Tahun data training"
-              required>
+            <label for="{{ data_training_form.tahun.id_for_label }}"
+              class="form-label">{{ data_training_form.tahun.label_tag }}</label>
+            <!-- <input type="text" class="form-control" id="tahun" name="tahun" placeholder="Masukan Tahun data training"
+              required> -->
+            {{ data_training_form.tahun }}
           </div>
           <div class="mb-3">
-            <label for="file" class="form-label">File Pdf (Skripsi)</label>
-            <input type="file" class="form-control" id="file" name="file" placeholder="Masukan file" required>
-          </div> -->
+            <label for="{{ data_training_form.file.id_for_label }}"
+              class="form-label">{{ data_training_form.file.label_tag }}</label>
+            <!-- <input type="file" class="form-control" id="file" name="file" placeholder="Masukan file" required> -->
+            {{ data_training_form.file }}
+          </div>
 
-          {{ data_training_form }}
+          <!-- {{ data_training_form }} -->
 
-          <button type="submit" class="btn btn-primary my-3">Tambah Data Training</button>
+          <button type="submit" class="btn btn-primary my-3" id="btnTambah">Tambah</button>
         </form>
       </div>
     </div>
 
   </div>
 </div>
+
+<script>
+  const btnTambahElem = document.getElementById('btnTambah')
+  const overlayLoadingElem = document.getElementById('overlayLoading')
+  btnTambahElem.addEventListener('click', function (event) {
+    overlayLoadingElem.classList.remove('d-none')
+  })
+</script>
 {% endblock content %}
