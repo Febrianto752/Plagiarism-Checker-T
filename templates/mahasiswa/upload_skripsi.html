@@ -2,17 +2,32 @@
 
 
 {% block content %}
-<!-- <nav aria-label="breadcrumb mb-3">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url 'mahasiswa:cek_plagiarisme' request.session.npm %}">Cek Plagiarisme</a>
-    </li>
-    <li class="breadcrumb-item active" aria-current="page">Upload Skripsi</li>
-  </ol>
-</nav> -->
+<style>
+  .overlay-loading {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    position: absolute;
+    z-index: 5;
+    top: -20px;
+    /* bottom: 0; */
+    height: 100vh;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .5);
+  }
+</style>
+
+<div class="overlay-loading d-none" id="overlayLoading">
+  <div class="spinner-border" role="status" style="width: 100px; height: 100px; margin-top: 50vh;">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
 
 <a href="{% url 'mahasiswa:cek_plagiarisme' request.session.npm %}" class="btn-sm btn-info text-decoration-none">&laquo;
   Back</a>
 <br>
+
 
 {% if messages %}
 <ul class="messages p-0 mt-2">
@@ -24,7 +39,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
   {% elif message.tags == 'error' %}
-  <div class="alert alert-error alert-dismissible fade show" role="alert">
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
     <p class="text-center">{{ message }}</p>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
@@ -68,10 +83,10 @@
     </table>
   </div>
   <p>file yang diupload harus berupa pdf dan Maksimal ukuran file : 25mb </p>
-  <div class="spinner-border text-primary d-none" role="status" id="spinner">
+  <!-- <div class="spinner-border text-primary d-none" role="status" id="spinner">
     <span class="visually-hidden">Loading...</span>
-  </div>
-  <br>
+  </div> -->
+  <!-- <br> -->
   <button type="submit" class="btn btn-primary mt-3" id="btnUpload">Upload</button>
 </form>
 
@@ -79,11 +94,13 @@
   const btnUploadElem = document.getElementById('btnUpload')
   const spinnerElem = document.getElementById('spinner')
   const pdfElem = document.querySelector('input[type=file]')
+  const overlayLoadingElem = document.getElementById('overlayLoading')
   console.log(pdfElem.value == false);
 
   btnUploadElem.addEventListener('click', function (event) {
     if (pdfElem.value != false) {
-      spinnerElem.classList.remove('d-none')
+      // spinnerElem.classList.remove('d-none')
+      overlayLoadingElem.classList.remove('d-none')
 
     }
   })

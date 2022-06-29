@@ -1,0 +1,67 @@
+{% extends 'admin_page_template.html' %}
+
+
+{% block content %}
+
+
+
+<div class="row justify-content-center">
+  <div class="col-sm-8 col-lg-6">
+
+    {% if messages %}
+    <ul class="messages p-0 text-center">
+      {% for message in messages %}
+
+      {% if message.tags == 'success' %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% elif message.tags == 'error' %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% else %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="card shadow-lg">
+      <h4 class="card-header text-center">Ubah Detail Data Training</h4>
+      <div class="card-body">
+
+        <form action="" method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="judul" class="form-label">Judul</label>
+            <input type="text" class="form-control" id="judul" name="judul" value="{{ data_training.judul }}"
+              placeholder="Masukan judul..." required>
+          </div>
+          <div class="mb-3">
+            <label for="penulis" class="form-label">Penulis</label>
+            <input type="text" class="form-control" id="penulis" name="penulis" value="{{ data_training.penulis }}"
+              placeholder="Masukan penulis..." required>
+          </div>
+          <div class="mb-3">
+            <label for="tahun" class="form-label">Tahun</label>
+            <input type="number" class="form-control" id="tahun" name="tahun" value="{{ data_training.tahun }}"
+              placeholder="Masukan tahun..." required>
+          </div>
+
+          <button class="btn btn-primary">Update</button>
+        </form>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

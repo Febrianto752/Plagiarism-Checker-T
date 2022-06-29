@@ -104,11 +104,11 @@
             </td>
 
             <td>
-              <div style="min-width: 230px;">
+              <div>
                 <form action="{% url 'mahasiswa:profile' mahasiswa.npm %}" method="get" class="d-inline-block">
                   {% csrf_token %}
-                  <button type="submit" class="btn-sm btn-info text-decoration-none me-2"
-                    style="border: 0; outline:0;"><i class="fas fa-eye"></i> View</button>
+                  <button type="submit" class="btn-sm btn-info text-decoration-none me-2" style="border: 0; outline:0;"
+                    title="lihat detail"><i class="fas fa-eye"></i></button>
                 </form>
                 <!-- <form action="{% url 'plagiarisme:cek_plagiarisme' mahasiswa.npm %}" method="get"
                   class="d-inline-block">
@@ -122,7 +122,8 @@
                 <form action="{% url 'mahasiswa:hapus' mahasiswa.npm %}" method="get" class="d-inline-block">
                   {% csrf_token %}
                   <button type="submit" onclick="return confirm('yakin ingin menghapus data ini?')"
-                    class="btn-sm btn-danger" style="border: 0; outline:0;"><i class="fas fa-times"></i> Hapus</button>
+                    class="btn-sm btn-danger" style="border: 0; outline:0;" title="hapus data"><i
+                      class="fas fa-trash"></i></button>
                 </form>
               </div>
 

@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.views.generic import View, ListView, RedirectView
+from django.views.generic import View, ListView, RedirectView, DetailView
 
 from administrator.forms import DataTrainingForm
 from .models import Admin, DataTraining
@@ -254,6 +254,33 @@ class HapusDataTraining(View):
     return redirect('administrator:data_trainings')
 
 
+class UbahDataTraining(View):
+  template_name = 'admin/ubah_data_training.html'
+  context = {
+    'title': 'ubah detail data training'
+  }
+  
+  def get(self, *args, **kwargs):
+    data_training = DataTraining.objects.get(id=kwargs['id'])
+    self.context['data_training'] = data_training
+    return render(self.request, self.template_name, self.context)
+  
+  def post(self, *args, **kwargs):
+    id = kwargs['id']
+    
+    judul = self.request.POST['judul']
+    penulis = self.request.POST['penulis']
+    tahun = self.request.POST['tahun']
+    
+    try:
+      data_training = DataTraining.objects.filter(id=id)
+      data_training.update(judul=judul, penulis=penulis, tahun=tahun)
+      messages.success(self.request, 'berhasil mengubah detail data training')
+      return redirect('administrator:data_trainings')
+    except:
+      messages.error(self.request, 'something error')
+      return redirect('administrator:ubah_data_training', id)
+  
   
 
 

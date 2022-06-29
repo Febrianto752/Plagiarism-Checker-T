@@ -103,8 +103,14 @@
 <script>
   const btnTambahElem = document.getElementById('btnTambah')
   const overlayLoadingElem = document.getElementById('overlayLoading')
+  const idFileElem = document.getElementById('id_file')
   btnTambahElem.addEventListener('click', function (event) {
-    overlayLoadingElem.classList.remove('d-none')
+
+    if (idFileElem.value != false) {
+      // spinnerElem.classList.remove('d-none')
+      overlayLoadingElem.classList.remove('d-none')
+
+    }
   })
 </script>
 {% endblock content %}

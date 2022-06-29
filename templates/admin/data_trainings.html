@@ -36,7 +36,7 @@
 </ul>
 {% endif %}
 
-<h1>Daftar Data Training</h1>
+<h1 class="text-center">Daftar Data Training</h1>
 
 <a href="{% url 'administrator:tambah_data_training' %}" class="btn btn-primary my-4">Tambah Data Training</a>
 
@@ -70,11 +70,18 @@
 
           </td>
           <td>
+            <form action="{% url 'administrator:ubah_data_training' data_training.id %}" method="get"
+              class="d-inline-block">
+              {% csrf_token %}
+              <button type="submit" class="btn-sm btn-warning" style="border: 0; outline:0;" title="edit data"><i
+                  class="fas fa-edit"></i></button>
+            </form>
             <form action="{% url 'administrator:hapus_data_training' data_training.id %}" method="post"
               class="d-inline-block">
               {% csrf_token %}
               <button type="submit" onclick="return confirm('yakin ingin menghapus data ini?')"
-                class="btn-sm btn-danger" style="border: 0; outline:0;"><i class="fas fa-times"></i> Delete</button>
+                class="btn-sm btn-danger" style="border: 0; outline:0;" title="hapus data"><i
+                  class="fas fa-trash"></i></button>
             </form>
           </td>
 
