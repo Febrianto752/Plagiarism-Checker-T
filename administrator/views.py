@@ -125,7 +125,7 @@ class TambahAdmin(View):
     
     
     try:
-      Admin.objects.create(username=username, password=password, email=email, no_telp=no_telp)
+      Admin.objects.create(username=username,nama=nama, password=password, email=email, no_telp=no_telp)
     except:
       messages.error(self.request,'Something Error')
       return redirect('administrator:tambah')

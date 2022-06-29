@@ -18,6 +18,7 @@ class DaftarMahasiswa(ListView):
   template_name = 'mahasiswa/daftar_mahasiswa.html'
   model = Mahasiswa
   paginate_by = 25
+  ordering = 'npm'
   
   def get(self, *args, **kwargs):
     if not 'username' in self.request.session:
@@ -94,6 +95,27 @@ class UbahProfile(View):
     self.context['jurusan_jurusan'] = JURUSAN_JURUSAN
     
     return render(self.request, self.template_name, self.context)
+  
+  def post(self, *args, **kwargs):
+    
+    old_npm = kwargs['npm']
+    new_npm = self.request.POST['npm']
+    nama = self.request.POST['nama']
+    email = self.request.POST['email']
+    jurusan = self.request.POST['jurusan']
+    semester = self.request.POST['semester']
+    no_telp = self.request.POST['no_telp']
+    
+    mahasiswa = Mahasiswa.objects.filter(npm=old_npm)
+    try:
+      mahasiswa.update(npm=new_npm, nama=nama, email=email, jurusan=jurusan, semester=semester, no_telp=no_telp)
+    
+      messages.success(self.request, 'berhasil mengubah profile')
+      return redirect('mahasiswa:daftar_mahasiswa')
+    except:
+      messages.success(self.request, 'something error')
+      return redirect('mahasiswa:ubah_mahasiswa', old_npm)
+      
 
 class Hapus(RedirectView):
   url = '/mahasiswa/'
