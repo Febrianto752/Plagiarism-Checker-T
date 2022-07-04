@@ -148,7 +148,7 @@
   const wrapperLinkDetailPlagiarismElem = document.getElementById('wrapper-links-detail-plagiarism')
 
 
-  fetch('http://127.0.0.1:8000/plagiarisme/report/{{ npm }}/text_similiarity/')
+  fetch('/plagiarisme/report/{{ npm }}/text_similiarity/')
     .then(response => response.json())
     .then(responseJson => {
       console.log(responseJson);
@@ -217,7 +217,8 @@
 
       wrapperBtnCetak.innerHTML = contentBtnCetak
 
-      fetch(`http://127.0.0.1:8000/plagiarisme/{{ npm }}/${percent}`).then(response => response.json())
+      // set percentage plagiarism
+      fetch(`/plagiarisme/{{ npm }}/${percent}`).then(response => response.json())
         .then(responseJson => {
           console.log('success')
         })
@@ -253,7 +254,7 @@
 
         // item = ['highlightX', [idDataTraining, info_data_training]]
         wrapperLinkDetailPlagiarismElem.innerHTML += `
-        <li class="list-group-item"><a href="http://127.0.0.1:8000/plagiarisme/detail/{{ npm }}/${item[1][0]}/"
+        <li class="list-group-item"><a href="/plagiarisme/detail/{{ npm }}/${item[1][0]}/"
           class="${item[0]}"><strong>${percent}%</strong> from : 
           ${item[1][1]}</a>
         </li>`

@@ -95,7 +95,7 @@
     }
     progressBarCekPlagElem.style = `width: ${(iteration/(jumlah_data_training-1))*100}%`
 
-    return fetch(`http://127.0.0.1:8000/plagiarisme/${npm}/${iteration}/${pk}/${jumlah_data_training}`)
+    return fetch(`/plagiarisme/${npm}/${iteration}/${pk}/${jumlah_data_training}`)
       .then(response => response.json())
       .then(responseJson => {
         console.log(responseJson);

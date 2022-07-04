@@ -60,8 +60,8 @@ def checking(request, npm, iteration, pk, count):
         
   else:
     data_training = DataTraining.objects.raw(f"SELECT id, penulis, text_file FROM data_training WHERE id > {pk} LIMIT 1")[0]
-  print(pk)
-  print(data_training)
+  # print(pk)
+  # print(data_training)
   # if '?' in mahasiswa.skripsi.content: 
   #     # print('?????')
   #     # mahasiswa.skripsi.content = mahasiswa.skripsi.content.replace('?','')
@@ -102,15 +102,15 @@ def checking(request, npm, iteration, pk, count):
     fingerprints_similiarity = convertStringRepresentationOfListToList(report_plagiarism[0].text_similiarity)
     hash_plagiarism_groups = make_hash_plagiarism_groups(fingerprints_similiarity, fingerprint_intersection,  data_training)
     report_plagiarism.update(text_similiarity=str(hash_plagiarism_groups))
-    print('dua')
+    # print('dua')
     
   elif report_plagiarism.exists() and report_plagiarism[0].is_done:
     hash_plagiarism_groups = make_hash_plagiarism_groups([],fingerprint_intersection,  data_training)
     report_plagiarism.update(text_similiarity=str(hash_plagiarism_groups), is_done=0)
-    print('tiga')
+    # print('tiga')
 
   if iteration == count:   
-    print('hello')   
+    # print('hello')   
 
 
     report_plagiarism = ReportPlagiarism.objects.filter(skripsi_id = mahasiswa.skripsi.id)
@@ -124,7 +124,7 @@ def checking(request, npm, iteration, pk, count):
 
 
 def textSimiliarity(request, npm):
-  print(npm)
+  # print(npm)
   mahasiswa = Mahasiswa.objects.get(npm=npm)
   skripsi_mhs = Skripsi.objects.get(mahasiswa_id = mahasiswa.id)
   report_plagiarism = ReportPlagiarism.objects.get(skripsi_id=skripsi_mhs.id)
@@ -139,7 +139,7 @@ def textSimiliarity(request, npm):
   quadword_groups = get_quadword_from_hash(hash_plagiarism_groups_with_index, tokens_skipsi_mhs)
 
   stack_quadword_group = make_stack_quadword_group(quadword_groups)
-  print(len(stack_quadword_group))
+  # print(len(stack_quadword_group))
   return JsonResponse( {'stack_quadword_group': stack_quadword_group})
   # return JsonResponse({'text_of_plagiarism': stack_quadword_group, 'stack_quadword_group': stack_quadword_group})
 
@@ -147,8 +147,8 @@ def textSimiliarity(request, npm):
 
 def setPlagiarismPercentage(request, *args, **kwargs):
   mahasiswa = Mahasiswa.objects.get(npm=kwargs['npm'])
-  print(mahasiswa.skripsi.reportplagiarism.plagiarism_percentage)
-  print(kwargs['percentage'])
+  # print(mahasiswa.skripsi.reportplagiarism.plagiarism_percentage)
+  # print(kwargs['percentage'])
   mahasiswa.skripsi.reportplagiarism.plagiarism_percentage = kwargs['percentage']
   mahasiswa.skripsi.reportplagiarism.save()
   

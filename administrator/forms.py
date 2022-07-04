@@ -17,6 +17,7 @@ class DataTrainingForm(ModelForm):
         'class': 'form-control'
       }),
       'file': FileInput(attrs={
-        'class': 'form-control'
+        'class': 'form-control',
+        'accept': '.pdf'
       })
     }

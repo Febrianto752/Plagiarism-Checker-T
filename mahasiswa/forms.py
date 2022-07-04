@@ -1,3 +1,4 @@
+from django.forms import FileInput
 from django.forms import ModelForm
 from .models import Mahasiswa, Skripsi
 
@@ -5,6 +6,13 @@ class SkripsiForm(ModelForm):
   class Meta:
     model = Skripsi 
     fields = ['pdf']
+    
+    widgets = {
+      'pdf': FileInput(attrs={
+        'class': 'form-control',
+        'accept': '.pdf'
+      })
+    }
     
   def __init__(self, *args, **kwargs):
     if args:

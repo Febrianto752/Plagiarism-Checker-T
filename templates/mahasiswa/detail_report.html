@@ -84,7 +84,7 @@
   let textSkripsi = inputTextElem2.textContent
   textSkripsi = textSkripsi.replace(/\s+/g, ' ').trim()
   textSkripsi = textSkripsi.split(' ')
-  console.log(textSkripsi.length);
+  // console.log(textSkripsi.length);
   fetch(`{% url 'plagiarisme:similiarity_one_to_one' mahasiswa.npm data_training.id %}`)
     .then(response => response.json())
     .then(responseJson => {
