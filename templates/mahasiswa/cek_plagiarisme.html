@@ -37,8 +37,8 @@
         <p class="d-flex align-content-center">File Skripsi :
 
           {% if object.skripsi.pdf %}
-          <a href="/media/{{ object.skripsi.pdf }}"
-            class="ms-2 text-overflow d-inline-block">{{ object.skripsi.pdf }}</a>
+          <a href="/media/{{ object.skripsi.pdf }}" class="ms-2 text-overflow d-inline-block"
+            title="{{ object.skripsi.pdf }}">{{ object.skripsi.pdf }}</a>
           {% else %}
 
           <a href="#">Belum Ada</a>

@@ -60,13 +60,14 @@
         <tr>
           <th scope="row">{{ forloop.counter }}</th>
           <td>
-            <div class="text-overflow">{{ data_training.judul }}</div>
+            <div class="text-overflow" title="{{ data_training.judul }}">{{ data_training.judul }}</div>
           </td>
-          <td>{{ data_training.penulis }}</td>
+          <td class="text-overflow" title="{{ data_training.penulis }}">{{ data_training.penulis }}</td>
 
           <td>{{ data_training.tahun }}</td>
           <td>
-            <a href="/media/{{ data_training.file }}" class="text-overflow" title="{{data_training.file}}">{{ data_training.file }}</a>
+            <a href="/media/{{ data_training.file }}" class="text-overflow"
+              title="{{data_training.file}}">{{ data_training.file }}</a>
 
           </td>
           <td>
