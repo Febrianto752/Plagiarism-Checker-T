@@ -162,15 +162,20 @@
         }
 
         `
+        
         stack_words.forEach((word, i) => {
           if (i != 0) {
             $("#inputText").highlight(word, {
               className: `highlight${index}`
             });
+
+            
           }
         })
-
         info_data_training = stack_words[0]
+
+        $(`#inputText .highlight${index}`).attr('title', info_data_training[1])
+        
         console.log(info_data_training);
 
         listDetailPlagiarism.push([`highlight${index}`, info_data_training])
@@ -193,7 +198,7 @@
       let totalAwalKata = textSkripsi.length
 
       let textOfRemovePlagiarism = inputTextElem.innerHTML.replace(new RegExp(
-        '<span class="highlight\[0-9]+\">[\\d\\D]*?</span>', 'g'), '')
+        '<span class="highlight\[0-9]+\" title="[\\d\\D]*?">[\\d\\D]*?</span>', 'g'), '')
       textOfRemovePlagiarism = textOfRemovePlagiarism.replace(/\s+/g, ' ').trim()
       textOfRemovePlagiarism = textOfRemovePlagiarism.split(' ')
       let jumlahKataSetelahRemoveKataPlagiat = textOfRemovePlagiarism.length
@@ -234,11 +239,11 @@
         let totalAwalKata = textSkripsi.length
 
         let textOfRemovePlagiarism = inputTextElem.innerHTML.replace(new RegExp(
-          `<span class="${item[0]}">[\\d\\D]*?</span>`, 'g'), '')
+          `<span class="${item[0]}" title="[\\d\\D]*?">[\\d\\D]*?</span>`, 'g'), '')
 
         // console.log(textOfRemovePlagiarism);
         textOfRemovePlagiarism = textOfRemovePlagiarism.replace(new RegExp(
-          `<span class="[\\d\\D]*?">`, 'g'), '')
+          `<span class="[\\d\\D]*?" title="[\\d\\D]*?">`, 'g'), '')
 
         textOfRemovePlagiarism = textOfRemovePlagiarism.replace(new RegExp(
           `</span>`, 'g'), '')
