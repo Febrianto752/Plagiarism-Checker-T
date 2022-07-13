@@ -197,9 +197,35 @@ class BuatAdminPertama(View):
   }
   
   def get(self, *args, **kwargs):
-    return render(self.request, self.template_name, self.extra_context)
+    
+    # try:
+    admin_exist = Admin.objects.all().first()
+    if not admin_exist:
+      return render(self.request, self.template_name, self.extra_context)
+    else:
+      # messages.error(self.request, 'you dont have permission')
+      return redirect('administrator:login')
+      
+    # except:
+      
+    
+    
 
-
+  def post(self, *args, **kwargs):
+    username = self.request.POST['username']
+    password = self.request.POST['password']
+    nama = self.request.POST['nama']
+    email = self.request.POST['email']
+    no_telp = self.request.POST['no_telp']
+    
+    try:
+      Admin.objects.create(username=username,nama=nama, password=password, email=email, no_telp=no_telp)
+    except:
+      messages.error(self.request,'Something Error')
+      return redirect('administrator:login')
+    
+    messages.success(self.request, 'berhasil menambah admin baru')
+    return redirect('administrator:login')
 
 
 
