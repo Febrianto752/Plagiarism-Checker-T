@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'base.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'plagiarism_checker',
+        'NAME': 'plagiarism_checker_test',
         'USER':'root',
         'PASSWORD': '',
         'HOST': 'localhost',

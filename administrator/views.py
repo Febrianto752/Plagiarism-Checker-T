@@ -190,6 +190,16 @@ class UbahPassword(View):
     return redirect('administrator:profile')
 
 
+class BuatAdminPertama(View):
+  template_name = 'admin/buat_admin_pertama.html'
+  extra_context = {
+    'title': 'create first admin'
+  }
+  
+  def get(self, *args, **kwargs):
+    return render(self.request, self.template_name, self.extra_context)
+
+
 
 
 
