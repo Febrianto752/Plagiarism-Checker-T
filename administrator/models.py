@@ -3,6 +3,7 @@ from django.db import models
 from django.dispatch import receiver
 from pdfminer.high_level import extract_text
 from plagiarisme.packages.rabin import filterText
+
 # Create your models here.
 class Admin(models.Model):
   nama = models.CharField(max_length=40)

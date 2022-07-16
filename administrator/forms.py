@@ -2,6 +2,8 @@ from django.forms import FileInput, ModelForm, NumberInput, TextInput
 from .models import DataTraining
 
 class DataTrainingForm(ModelForm):
+
+  
   class Meta:
     model = DataTraining
     fields = ['judul', 'penulis', 'tahun', 'file']
