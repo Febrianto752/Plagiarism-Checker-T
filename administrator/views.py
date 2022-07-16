@@ -269,6 +269,10 @@ class TambahDataTraining(View):
   
   
   def post(self, *args, **kwargs):
+    if not self.request.FILES['file'].name.endswith('.pdf'):
+      messages.error(self.request, 'file yang anda upload harus pdf...') # mengirimkan flash message error
+      return redirect('administrator:tambah_data_training')
+    
     form = DataTrainingForm(self.request.POST, self.request.FILES)
     
     if form.is_valid():

@@ -215,7 +215,10 @@ class UploadSkripsi(View):
     return render(request, self.template_name, context)
 
   def post(self, *args, **kwargs):
-
+    if not self.request.FILES['pdf'].name.endswith('.pdf'):
+      messages.error(self.request, 'file yang anda upload harus pdf...') # mengirimkan flash message error
+      return redirect('mahasiswa:upload_skripsi', self.request.POST['npm'])
+    
     mahasiswa = Mahasiswa.objects.get(npm=self.request.POST['npm'])
     skripsi_mahasiswa = Skripsi.objects.filter(mahasiswa_id=mahasiswa.id)
 
@@ -233,7 +236,7 @@ class UploadSkripsi(View):
         return redirect('mahasiswa:upload_skripsi', self.request.POST['npm'])
       
       messages.success(self.request, 'Berhasil Mengupload...')
-      return redirect('mahasiswa:upload_skripsi', self.request.POST['npm'])
+      return redirect('mahasiswa:cek_plagiarisme', self.request.POST['npm'])
     
 class ShowReport(View):
   template_name = 'mahasiswa/report.html'
