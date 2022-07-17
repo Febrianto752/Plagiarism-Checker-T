@@ -32,7 +32,7 @@
   #btnShowDetailPlagiarism {
     position: absolute;
     top: 60px;
-    left: 100px;
+    left: 60px;
   }
 
   #report {
@@ -69,8 +69,9 @@
 <div id="wrapper-btn-cetak">
 
 </div>
-<button id="btnShowDetailPlagiarism" class="btn btn-info d-none" type="button" data-bs-toggle="offcanvas"
-  data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Show Detail Plagiarism</button>
+<button id="btnShowDetailPlagiarism" class="btn btn-info d-none ms-2" type="button" data-bs-toggle="offcanvas"
+  data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><span class="iconify"
+    data-icon="ci:bar-chart-horizontal" data-width="20" data-height="20" data-rotate="180deg"></span></button>
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
   <div class="offcanvas-header">
@@ -142,7 +143,7 @@
   const scoreSimiliarityElem = document.getElementById('scoreSimiliarity')
   const wrapperBtnCetak = document.getElementById('wrapper-btn-cetak')
   let contentBtnCetak =
-    `<button type="button" class="btn btn-primary" id="cetak" onclick="generatePDF()">Cetak</button>`
+    `<button type="button" class="btn btn-primary d-inline-block" id="cetak" onclick="generatePDF()"><i class="fas fa-print"></i></button>`
 
   const btnShowDetailPlagiarismElem = document.getElementById('btnShowDetailPlagiarism')
   const wrapperLinkDetailPlagiarismElem = document.getElementById('wrapper-links-detail-plagiarism')
@@ -162,20 +163,20 @@
         }
 
         `
-        
+
         stack_words.forEach((word, i) => {
           if (i != 0) {
             $("#inputText").highlight(word, {
               className: `highlight${index}`
             });
 
-            
+
           }
         })
         info_data_training = stack_words[0]
 
         $(`#inputText .highlight${index}`).attr('title', info_data_training[1])
-        
+
         console.log(info_data_training);
 
         listDetailPlagiarism.push([`highlight${index}`, info_data_training])
