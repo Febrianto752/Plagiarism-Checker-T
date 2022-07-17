@@ -55,11 +55,6 @@ class Skripsi(models.Model):
   class Meta: 
     db_table = 'skripsi'
   
-  # def get_absolute_url(self):
-  #   url_slug = {
-  #     'pk':self.id
-  #   }
-  #   return reverse('administrator:detail_mahasiswa')
 
 # jika user update data table skripsi maka file old pdf akan dihapus
 @receiver(models.signals.pre_save, sender=Skripsi)

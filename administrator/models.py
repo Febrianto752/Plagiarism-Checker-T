@@ -1,8 +1,6 @@
-import os
 from django.db import models
-from django.dispatch import receiver
 from pdfminer.high_level import extract_text
-from plagiarisme.packages.rabin2 import filterText
+from plagiarisme.packages.rabin import filterText
 
 # Create your models here.
 class Admin(models.Model):
@@ -53,30 +51,4 @@ class DataTraining(models.Model):
     
     return super().delete(*args, **kwargs)
 
-  # def get_absolute_url(self):
-  #   url_slug = {
-  #     'pk':self.id
-  #   }
-  #   return reverse('administrator:detail_mahasiswa')
-
-# jika user update data table skripsi maka file old pdf akan dihapus
-# @receiver(models.signals.pre_save, sender=DataTraining)
-# def auto_delete_file_datatraining_on_change(sender, instance, **kwargs):
-#     """
-#     Deletes old file from filesystem
-#     when corresponding `Skripsi` object is updated
-#     with new file.
-#     """
-#     if not instance.pk:
-#         return False
-
-#     try:
-#         old_file = DataTraining.objects.get(pk=instance.pk).file
-#     except DataTraining.DoesNotExist:
-#         return False
-
-#     new_file = instance.file
-#     if not old_file == new_file:
-#         if os.path.isfile(old_file.path):
-#             os.remove(old_file.path)
   

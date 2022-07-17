@@ -11,10 +11,35 @@
     text-overflow: ellipsis;
   }
 </style>
+
 <h1 class="text-center"></h1>
 
 <div class="row justify-content-center">
   <div class="col-sm-8 col-lg-6">
+    {% if messages %}
+    <ul class="messages p-0">
+      {% for message in messages %}
+
+      {% if message.tags == 'success' %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <p class="text-center">{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% elif message.tags == 'error' %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% else %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+
+      {% endfor %}
+    </ul>
+    {% endif %}
     <div class="card shadow-sm">
       <h5 class="card-header text-center">Plagiarism Checker F</h5>
       <div class="card-body">
@@ -25,8 +50,7 @@
           {% csrf_token %}
           <button class="btn-sm btn-success text-decoration-none" id="linkDownloadReport">show report</button>
         </form>
-        <!-- <a href="{% url 'mahasiswa:report_plagiarism' object.npm %}" class="btn-sm btn-success text-decoration-none"
-            id="linkDownloadReport">show report</a> -->
+
 
         {% else %}
         <a href="#" class="btn-sm btn-secondary text-decoration-none" id="linkDownloadReport">Belum Ada</a>

@@ -1,10 +1,10 @@
 from django.shortcuts import redirect, render
-from django.views.generic import View, ListView, RedirectView, DetailView
+from django.views.generic import View, ListView, RedirectView
 
 from administrator.forms import DataTrainingForm
 from .models import Admin, DataTraining
 from django.contrib import messages
-from django.urls import reverse, resolve
+from django.urls import resolve
 
 # Create your views here.
 
