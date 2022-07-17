@@ -14,6 +14,9 @@ from .models import SideBySide
 from django.contrib import messages
 from django.shortcuts import redirect
 
+from .packages.rabin2 import filterText as filterText2, createTokens as createTokens2
+from .packages.utils2 import intersection as intersection2, removeTheSameQuadword, make_quadword_plagiarism_groups
+
 
 # Create your views here.
 
@@ -72,39 +75,45 @@ def checking(request, npm, iteration, pk, count):
   # print(dir(report_plagiarism))
 
   # fingerprint1
-  filter_text1 = filterText(skripsi_mahasiswa)
-  tokens_text1 = createTokens(filter_text1)
-  hashesMD5_text1 = createHashesMD5(tokens_text1)
+  filter_text1 = filterText2(skripsi_mahasiswa)
+  tokens_text1 = createTokens2(filter_text1)
+  # hashesMD5_text1 = createHashesMD5(tokens_text1)
 
 
   # fingerprint2
-  filter_text2 = filterText(text_data_training)
-  tokens_text2 = createTokens(filter_text2)
-  hashesMD5_text2 = createHashesMD5(tokens_text2)
+  filter_text2 = filterText2(text_data_training)
+  tokens_text2 = createTokens2(filter_text2)
+  # hashesMD5_text2 = createHashesMD5(tokens_text2)
 
-  unique_hashesMD51 = removeTheSameHash(hashesMD5_text1)
-  unique_hashesMD52 = removeTheSameHash(hashesMD5_text2)
+  # unique_hashesMD51 = removeTheSameHash(hashesMD5_text1)
+  # unique_hashesMD52 = removeTheSameHash(hashesMD5_text2)
+  
 
 
-  fingerprint_intersection = intersection(unique_hashesMD51, unique_hashesMD52)
+  # fingerprint_intersection = intersection2(unique_hashesMD51, unique_hashesMD52)
+  unique_tokens_text1 = removeTheSameQuadword(tokens_text1)
+  unique_tokens_text2 = removeTheSameQuadword(tokens_text2)
+  # unique_hashesMD51 = removeTheSameHash(hashesMD5_text1)
+  # unique_hashesMD52 = removeTheSameHash(hashesMD5_text2)
+  fingerprint_intersection = intersection(unique_tokens_text1, unique_tokens_text2)
   report_plagiarism = ReportPlagiarism.objects.filter(skripsi_id=mahasiswa.skripsi.id)
   
   
-  hash_plagiarism_groups = None
+  quadword_plagiarism_groups = None
   if not report_plagiarism.exists():
-    hash_plagiarism_groups = make_hash_plagiarism_groups([],fingerprint_intersection, data_training)
-    report_plagiarism = ReportPlagiarism.objects.create(text_similiarity=str(hash_plagiarism_groups), skripsi_id = mahasiswa.skripsi.id)
+    quadword_plagiarism_groups = make_quadword_plagiarism_groups([],fingerprint_intersection, data_training)
+    report_plagiarism = ReportPlagiarism.objects.create(text_similiarity=str(quadword_plagiarism_groups), skripsi_id = mahasiswa.skripsi.id)
 
     
   elif report_plagiarism.exists() and not report_plagiarism[0].is_done:
     fingerprints_similiarity = convertStringRepresentationOfListToList(report_plagiarism[0].text_similiarity)
-    hash_plagiarism_groups = make_hash_plagiarism_groups(fingerprints_similiarity, fingerprint_intersection,  data_training)
-    report_plagiarism.update(text_similiarity=str(hash_plagiarism_groups))
+    quadword_plagiarism_groups = make_quadword_plagiarism_groups(fingerprints_similiarity, fingerprint_intersection,  data_training)
+    report_plagiarism.update(text_similiarity=str(quadword_plagiarism_groups))
     # print('dua')
     
   elif report_plagiarism.exists() and report_plagiarism[0].is_done:
-    hash_plagiarism_groups = make_hash_plagiarism_groups([],fingerprint_intersection,  data_training)
-    report_plagiarism.update(text_similiarity=str(hash_plagiarism_groups), is_done=0)
+    quadword_plagiarism_groups = make_quadword_plagiarism_groups([],fingerprint_intersection,  data_training)
+    report_plagiarism.update(text_similiarity=str(quadword_plagiarism_groups), is_done=0)
     # print('tiga')
 
   if iteration == count:   
@@ -126,19 +135,19 @@ def textSimiliarity(request, npm):
   mahasiswa = Mahasiswa.objects.get(npm=npm)
   skripsi_mhs = Skripsi.objects.get(mahasiswa_id = mahasiswa.id)
   report_plagiarism = ReportPlagiarism.objects.get(skripsi_id=skripsi_mhs.id)
-  hash_plagiarism_groups = convertStringRepresentationOfListToList(report_plagiarism.text_similiarity)
+  quadword_plagiarism_groups = convertStringRepresentationOfListToList(report_plagiarism.text_similiarity)
   
   # skripsi mhs 
-  tokens_skipsi_mhs = createTokens(skripsi_mhs.content)
-  hashes_with_index_skripsi_mhs = createHashesMD5(tokens_skipsi_mhs)
+  # tokens_skipsi_mhs = createTokens(skripsi_mhs.content)
+  # hashes_with_index_skripsi_mhs = createHashesMD5(tokens_skipsi_mhs)
   
   # plagiarism detection 
-  hash_plagiarism_groups_with_index = get_hash_plagiarism_groups_with_index(hash_plagiarism_groups, hashes_with_index_skripsi_mhs)
-  quadword_groups = get_quadword_from_hash(hash_plagiarism_groups_with_index, tokens_skipsi_mhs)
+  # hash_plagiarism_groups_with_index = get_hash_plagiarism_groups_with_index(hash_plagiarism_groups, hashes_with_index_skripsi_mhs)
+  # quadword_groups = get_quadword_from_hash(hash_plagiarism_groups_with_index, tokens_skipsi_mhs)
 
-  stack_quadword_group = make_stack_quadword_group(quadword_groups)
+  # stack_quadword_group = make_stack_quadword_group(quadword_groups)
   # print(len(stack_quadword_group))
-  return JsonResponse( {'stack_quadword_group': stack_quadword_group})
+  return JsonResponse( {'stack_quadword_group': quadword_plagiarism_groups})
   # return JsonResponse({'text_of_plagiarism': stack_quadword_group, 'stack_quadword_group': stack_quadword_group})
 
 
@@ -198,40 +207,43 @@ def similiarityOneToOne(request, *args, **kwargs):
   text_data_training = data_training.text_file
   
   # fingerprint1
-  filter_text1 = filterText(content_skripsi_mhs)
+  # filter_text1 = filterText(content_skripsi_mhs)
   # print(filter_text1)
-  tokens_text1 = createTokens(filter_text1)
-  hashesMD5_text1 = createHashesMD5(tokens_text1)
+  tokens_text1 = createTokens2(content_skripsi_mhs)
+  # hashesMD5_text1 = createHashesMD5(tokens_text1)
 
 
   # fingerprint2
-  filter_text2 = filterText(text_data_training)
-  tokens_text2 = createTokens(filter_text2)
-  hashesMD5_text2 = createHashesMD5(tokens_text2)
+  # filter_text2 = filterText(text_data_training)
+  tokens_text2 = createTokens2(text_data_training)
+  # hashesMD5_text2 = createHashesMD5(tokens_text2)
 
-  unique_hashesMD51 = removeTheSameHash(hashesMD5_text1)
-  unique_hashesMD52 = removeTheSameHash(hashesMD5_text2)
-
-
-  fingerprint_intersection = intersection(unique_hashesMD51, unique_hashesMD52)
-  hash_plagiarism_groups = make_hash_plagiarism_groups([],fingerprint_intersection, data_training)
+  # unique_hashesMD51 = removeTheSameHash(hashesMD5_text1)
+  # unique_hashesMD52 = removeTheSameHash(hashesMD5_text2)
+  unique_tokens_text1 = removeTheSameQuadword(tokens_text1)
+  unique_tokens_text2 = removeTheSameQuadword(tokens_text2)
+  # unique_hashesMD51 = removeTheSameHash(hashesMD5_text1)
+  # unique_hashesMD52 = removeTheSameHash(hashesMD5_text2)
+  fingerprint_intersection = intersection(unique_tokens_text1, unique_tokens_text2)
+  quadword_plagiarism_groups = make_quadword_plagiarism_groups([],fingerprint_intersection, data_training)
+  # fingerprint_intersection = intersection(unique_hashesMD51, unique_hashesMD52)
+  # hash_plagiarism_groups = make_hash_plagiarism_groups([],fingerprint_intersection, data_training)
   # print(hash_plagiarism_groups)
   
-  hash_plagiarism_groups_with_index = get_hash_plagiarism_groups_with_index(hash_plagiarism_groups, hashesMD5_text1)
+  # hash_plagiarism_groups_with_index = get_hash_plagiarism_groups_with_index(hash_plagiarism_groups, hashesMD5_text1)
   # print(hash_plagiarism_groups_with_index)
   
-  quadword_groups = get_quadword_from_hash(hash_plagiarism_groups_with_index, tokens_text1)
+  # quadword_groups = get_quadword_from_hash(hash_plagiarism_groups_with_index, tokens_text1)
 
-  stack_quadword_group = make_stack_quadword_group(quadword_groups)
-  del stack_quadword_group[0][0]
-  return JsonResponse({'stack_quadword_group': stack_quadword_group[0]})
-
-
+  # stack_quadword_group = make_stack_quadword_group(quadword_groups)
+  del quadword_plagiarism_groups[0][0]
+  return JsonResponse({'stack_quadword_group': quadword_plagiarism_groups[0]})
 
 
 
-from .packages.rabin2 import filterText as filterText2, createTokens as createTokens2
-from .packages.utils2 import intersection as intersection2, removeTheSameQuadword, make_quadword_plagiarism_groups
+
+
+
 
 
 class SideBySideView(View):
@@ -265,10 +277,7 @@ class SideBySideView(View):
       exist_row.update(text_file1 = filter_text1, text_file2=filter_text2)
     else: 
       SideBySide.objects.create(inisial=self.request.session['username'], text_file1 = filter_text1, text_file2=filter_text2)
-    
-    
-
-    
+      
     
     # self.context['stack_quadword_group'] = json.dumps(stack_quadword_group)
     self.context['text_file1'] = filter_text1
