@@ -11,6 +11,8 @@ from mahasiswa.models import ReportPlagiarism
 from plagiarisme.packages.rabin import createHashesMD5, createTokens, filterText
 from plagiarisme.packages.utils import convertStringRepresentationOfListToList, get_hash_plagiarism_groups_with_index, get_quadword_from_hash, intersection, make_hash_plagiarism_groups, make_stack_quadword_group, removeTheSameHash
 from .models import SideBySide
+from django.contrib import messages
+from django.shortcuts import redirect
 # Create your views here.
 
 # === Tampilan Halaman ===
@@ -248,7 +250,9 @@ class SideBySideView(View):
     return render(self.request, self.template_name, self.context)
   
   def post(self, *args, **kwargs):
-  
+    if not self.request.FILES['file1'].name.endswith('.pdf') or not self.request.FILES['file2'].name.endswith('.pdf'):
+        messages.error(self.request, 'file yang anda upload harus pdf...') # mengirimkan flash message error
+        return redirect('plagiarisme:side_by_side_test')
     # fingerprint1
     text_file1 = extract_text(self.request.FILES['file1'].file)
     filter_text1 = filterText(text_file1)
